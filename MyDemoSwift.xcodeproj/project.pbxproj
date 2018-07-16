@@ -112,6 +112,11 @@
 		5BF5FE1720FC2DF5005D1ACA /* weiboIconWhite@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BF5FDB420FC2DF4005D1ACA /* weiboIconWhite@2x.png */; };
 		5BF5FE1820FC2DF5005D1ACA /* logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BF5FDB520FC2DF4005D1ACA /* logo@2x.png */; };
 		5BF5FE1920FC2DF5005D1ACA /* hotIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BF5FDB620FC2DF4005D1ACA /* hotIcon@2x.png */; };
+		5BF5FE3220FC3C20005D1ACA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5BF5FE3420FC3C20005D1ACA /* InfoPlist.strings */; };
+		5BF5FE3920FC3D4E005D1ACA /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5BF5FE3B20FC3D4E005D1ACA /* Localizable.strings */; };
+		5BF5FE4D20FC40A5005D1ACA /* MyUIMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BF5FE4C20FC40A5005D1ACA /* MyUIMenuViewController.swift */; };
+		5BF5FE4F20FC40BF005D1ACA /* ThirdMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BF5FE4E20FC40BF005D1ACA /* ThirdMenuViewController.swift */; };
+		5BF5FE5120FC40FA005D1ACA /* MyToolsMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BF5FE5020FC40FA005D1ACA /* MyToolsMenuViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -222,6 +227,15 @@
 		5BF5FDB420FC2DF4005D1ACA /* weiboIconWhite@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "weiboIconWhite@2x.png"; sourceTree = "<group>"; };
 		5BF5FDB520FC2DF4005D1ACA /* logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo@2x.png"; sourceTree = "<group>"; };
 		5BF5FDB620FC2DF4005D1ACA /* hotIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "hotIcon@2x.png"; sourceTree = "<group>"; };
+		5BF5FE3520FC3C29005D1ACA /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		5BF5FE3D20FC3D59005D1ACA /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5BF5FE3E20FC3E6C005D1ACA /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5BF5FE3F20FC3E78005D1ACA /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		5BF5FE4020FC3E90005D1ACA /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		5BF5FE4120FC3E96005D1ACA /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		5BF5FE4C20FC40A5005D1ACA /* MyUIMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyUIMenuViewController.swift; sourceTree = "<group>"; };
+		5BF5FE4E20FC40BF005D1ACA /* ThirdMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThirdMenuViewController.swift; sourceTree = "<group>"; };
+		5BF5FE5020FC40FA005D1ACA /* MyToolsMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyToolsMenuViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -260,8 +274,13 @@
 				5B9E26C01E85217400C855A3 /* MyNavigationController.swift */,
 				5B339D521E851FB400B1DF75 /* MyBaseViewController.swift */,
 				5B339D401E851CD700B1DF75 /* ViewController.swift */,
+				5BF5FE4320FC3ED2005D1ACA /* UI */,
+				5BF5FE4220FC3ED2005D1ACA /* IntegratedThird */,
+				5BF5FE4420FC3ED3005D1ACA /* Tools */,
 				5B339D451E851CD700B1DF75 /* Assets.xcassets */,
 				5B339D4A1E851CD700B1DF75 /* Info.plist */,
+				5BF5FE3420FC3C20005D1ACA /* InfoPlist.strings */,
+				5BF5FE3B20FC3D4E005D1ACA /* Localizable.strings */,
 			);
 			path = MyDemoSwift;
 			sourceTree = "<group>";
@@ -388,6 +407,30 @@
 			path = temp;
 			sourceTree = "<group>";
 		};
+		5BF5FE4220FC3ED2005D1ACA /* IntegratedThird */ = {
+			isa = PBXGroup;
+			children = (
+				5BF5FE4E20FC40BF005D1ACA /* ThirdMenuViewController.swift */,
+			);
+			path = IntegratedThird;
+			sourceTree = "<group>";
+		};
+		5BF5FE4320FC3ED2005D1ACA /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				5BF5FE4C20FC40A5005D1ACA /* MyUIMenuViewController.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		5BF5FE4420FC3ED3005D1ACA /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+				5BF5FE5020FC40FA005D1ACA /* MyToolsMenuViewController.swift */,
+			);
+			path = Tools;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -433,6 +476,7 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = 5B339D321E851CD600B1DF75;
 			productRefGroup = 5B339D3C1E851CD700B1DF75 /* Products */;
@@ -521,6 +565,7 @@
 				5BF5FDD420FC2DF4005D1ACA /* loginBG@2x.png in Resources */,
 				5BF5FDF620FC2DF5005D1ACA /* downArrow@2x.jpg in Resources */,
 				5BF5FDCE20FC2DF4005D1ACA /* myOrder@2x.png in Resources */,
+				5BF5FE3220FC3C20005D1ACA /* InfoPlist.strings in Resources */,
 				5BF5FE0A20FC2DF5005D1ACA /* pinlun@2x.jpg in Resources */,
 				5BF5FDB720FC2DF4005D1ACA /* bottomBarImage@2x.png in Resources */,
 				5BF5FDB820FC2DF4005D1ACA /* weChatIconWhite@2x.png in Resources */,
@@ -533,6 +578,7 @@
 				5BF5FDDA20FC2DF4005D1ACA /* feedback@2x.png in Resources */,
 				5BF5FDC520FC2DF4005D1ACA /* mineIcon@2x.png in Resources */,
 				5BF5FDBE20FC2DF4005D1ACA /* favoriteNormalIcon@2x.png in Resources */,
+				5BF5FE3920FC3D4E005D1ACA /* Localizable.strings in Resources */,
 				5BF5FDCC20FC2DF4005D1ACA /* clearCache@2x.png in Resources */,
 				5BF5FDE420FC2DF4005D1ACA /* dismiss@2x.png in Resources */,
 				5BF5FE1220FC2DF5005D1ACA /* activity@2x.jpg in Resources */,
@@ -560,8 +606,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				5B339D411E851CD700B1DF75 /* ViewController.swift in Sources */,
+				5BF5FE4D20FC40A5005D1ACA /* MyUIMenuViewController.swift in Sources */,
 				5B9E26C11E85217400C855A3 /* MyNavigationController.swift in Sources */,
+				5BF5FE4F20FC40BF005D1ACA /* ThirdMenuViewController.swift in Sources */,
 				5B339D3F1E851CD700B1DF75 /* AppDelegate.swift in Sources */,
+				5BF5FE5120FC40FA005D1ACA /* MyToolsMenuViewController.swift in Sources */,
 				5B9E26C31E8521EC00C855A3 /* MyTabBarController.swift in Sources */,
 				5B339D531E851FB400B1DF75 /* MyBaseViewController.swift in Sources */,
 			);
@@ -569,11 +618,35 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXVariantGroup section */
+		5BF5FE3420FC3C20005D1ACA /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5BF5FE3520FC3C29005D1ACA /* Base */,
+				5BF5FE4020FC3E90005D1ACA /* en */,
+				5BF5FE4120FC3E96005D1ACA /* zh-Hans */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		5BF5FE3B20FC3D4E005D1ACA /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5BF5FE3D20FC3D59005D1ACA /* Base */,
+				5BF5FE3E20FC3E6C005D1ACA /* en */,
+				5BF5FE3F20FC3E78005D1ACA /* zh-Hans */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
 		5B339D4B1E851CD700B1DF75 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -631,6 +704,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
