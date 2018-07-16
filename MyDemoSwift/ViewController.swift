@@ -8,11 +8,26 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: MyBaseViewController {
+    
+    let awake = 1;
+    
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.navigationItem.title = "asdfasdf";
+        
         // Do any additional setup after loading the view, typically from a nib.
+        
+        let label = UILabel.init(frame: CGRect.init(x: 100, y: 100, width: 100, height: 100))
+        
+        label.text = "test";
+        
+        self.view .addSubview(label)
+        
+        
     }
 
     override func didReceiveMemoryWarning() {
