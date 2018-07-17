@@ -5,3 +5,7 @@
   Created by 张鑫 on 2018/7/16.
   Copyright © 2018年 张鑫. All rights reserved.
 */
+"UI_Menu_Title"      = "UI";
+"Third_Menu_Title"   = "第三方";
+"Funct_Menu_Title"   = "功能";
+"Tools_Menu_Title"   = "工具";

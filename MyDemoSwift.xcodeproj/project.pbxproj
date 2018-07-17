@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		5B339D3F1E851CD700B1DF75 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B339D3E1E851CD700B1DF75 /* AppDelegate.swift */; };
-		5B339D411E851CD700B1DF75 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B339D401E851CD700B1DF75 /* ViewController.swift */; };
 		5B339D461E851CD700B1DF75 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5B339D451E851CD700B1DF75 /* Assets.xcassets */; };
 		5B339D531E851FB400B1DF75 /* MyBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B339D521E851FB400B1DF75 /* MyBaseViewController.swift */; };
 		5B9E26C11E85217400C855A3 /* MyNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B9E26C01E85217400C855A3 /* MyNavigationController.swift */; };
@@ -117,12 +116,15 @@
 		5BF5FE4D20FC40A5005D1ACA /* MyUIMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BF5FE4C20FC40A5005D1ACA /* MyUIMenuViewController.swift */; };
 		5BF5FE4F20FC40BF005D1ACA /* ThirdMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BF5FE4E20FC40BF005D1ACA /* ThirdMenuViewController.swift */; };
 		5BF5FE5120FC40FA005D1ACA /* MyToolsMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BF5FE5020FC40FA005D1ACA /* MyToolsMenuViewController.swift */; };
+		5BF5FE5320FC89B5005D1ACA /* MyPrint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BF5FE5220FC89B5005D1ACA /* MyPrint.swift */; };
+		5BF5FE5620FD7974005D1ACA /* FuncMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BF5FE5520FD7974005D1ACA /* FuncMenuViewController.swift */; };
+		5BF5FE5820FD84E8005D1ACA /* TabbarTransitionAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BF5FE5720FD84E8005D1ACA /* TabbarTransitionAnimation.swift */; };
+		5BF5FE5A20FDDD1F005D1ACA /* NaviTransitionAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BF5FE5920FDDD1F005D1ACA /* NaviTransitionAnimation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		5B339D3B1E851CD700B1DF75 /* MyDemoSwift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyDemoSwift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B339D3E1E851CD700B1DF75 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		5B339D401E851CD700B1DF75 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		5B339D451E851CD700B1DF75 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5B339D4A1E851CD700B1DF75 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5B339D521E851FB400B1DF75 /* MyBaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyBaseViewController.swift; sourceTree = "<group>"; };
@@ -236,6 +238,10 @@
 		5BF5FE4C20FC40A5005D1ACA /* MyUIMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyUIMenuViewController.swift; sourceTree = "<group>"; };
 		5BF5FE4E20FC40BF005D1ACA /* ThirdMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThirdMenuViewController.swift; sourceTree = "<group>"; };
 		5BF5FE5020FC40FA005D1ACA /* MyToolsMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyToolsMenuViewController.swift; sourceTree = "<group>"; };
+		5BF5FE5220FC89B5005D1ACA /* MyPrint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPrint.swift; sourceTree = "<group>"; };
+		5BF5FE5520FD7974005D1ACA /* FuncMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuncMenuViewController.swift; sourceTree = "<group>"; };
+		5BF5FE5720FD84E8005D1ACA /* TabbarTransitionAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabbarTransitionAnimation.swift; sourceTree = "<group>"; };
+		5BF5FE5920FDDD1F005D1ACA /* NaviTransitionAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaviTransitionAnimation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -271,11 +277,13 @@
 			children = (
 				5B339D3E1E851CD700B1DF75 /* AppDelegate.swift */,
 				5B9E26C21E8521EC00C855A3 /* MyTabBarController.swift */,
+				5BF5FE5720FD84E8005D1ACA /* TabbarTransitionAnimation.swift */,
 				5B9E26C01E85217400C855A3 /* MyNavigationController.swift */,
+				5BF5FE5920FDDD1F005D1ACA /* NaviTransitionAnimation.swift */,
 				5B339D521E851FB400B1DF75 /* MyBaseViewController.swift */,
-				5B339D401E851CD700B1DF75 /* ViewController.swift */,
 				5BF5FE4320FC3ED2005D1ACA /* UI */,
 				5BF5FE4220FC3ED2005D1ACA /* IntegratedThird */,
+				5BF5FE5420FD7919005D1ACA /* Func */,
 				5BF5FE4420FC3ED3005D1ACA /* Tools */,
 				5B339D451E851CD700B1DF75 /* Assets.xcassets */,
 				5B339D4A1E851CD700B1DF75 /* Info.plist */,
@@ -427,8 +435,17 @@
 			isa = PBXGroup;
 			children = (
 				5BF5FE5020FC40FA005D1ACA /* MyToolsMenuViewController.swift */,
+				5BF5FE5220FC89B5005D1ACA /* MyPrint.swift */,
 			);
 			path = Tools;
+			sourceTree = "<group>";
+		};
+		5BF5FE5420FD7919005D1ACA /* Func */ = {
+			isa = PBXGroup;
+			children = (
+				5BF5FE5520FD7974005D1ACA /* FuncMenuViewController.swift */,
+			);
+			path = Func;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -605,10 +622,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B339D411E851CD700B1DF75 /* ViewController.swift in Sources */,
+				5BF5FE5A20FDDD1F005D1ACA /* NaviTransitionAnimation.swift in Sources */,
 				5BF5FE4D20FC40A5005D1ACA /* MyUIMenuViewController.swift in Sources */,
+				5BF5FE5320FC89B5005D1ACA /* MyPrint.swift in Sources */,
+				5BF5FE5620FD7974005D1ACA /* FuncMenuViewController.swift in Sources */,
 				5B9E26C11E85217400C855A3 /* MyNavigationController.swift in Sources */,
 				5BF5FE4F20FC40BF005D1ACA /* ThirdMenuViewController.swift in Sources */,
+				5BF5FE5820FD84E8005D1ACA /* TabbarTransitionAnimation.swift in Sources */,
 				5B339D3F1E851CD700B1DF75 /* AppDelegate.swift in Sources */,
 				5BF5FE5120FC40FA005D1ACA /* MyToolsMenuViewController.swift in Sources */,
 				5B9E26C31E8521EC00C855A3 /* MyTabBarController.swift in Sources */,
