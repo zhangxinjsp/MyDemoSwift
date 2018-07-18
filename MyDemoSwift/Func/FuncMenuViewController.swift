@@ -8,28 +8,99 @@
 
 import UIKit
 
-class FuncMenuViewController: MyBaseViewController {
+enum FunctionDemo: String {
+    case networkSession
+    case test1
+    case test2
+    case test3
+}
 
+class FuncMenuViewController: MyBaseViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+    
+    let funcItems:[FunctionDemo] = [.networkSession, .test1, .test2, .test3]
+    
+
+    var layout:UICollectionViewFlowLayout? = UICollectionViewFlowLayout.init()
+    
+    var collection: UICollectionView?
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        layout?.scrollDirection = UICollectionViewScrollDirection.vertical
+        layout?.minimumLineSpacing = 8.0
+        layout?.minimumInteritemSpacing = 8.0
+        layout?.sectionInset = UIEdgeInsetsMake(15, 15, 15, 15)
+        layout?.itemSize = CGSize.init(width: self.view.bounds.size.width/3-20, height: 80)
+        
+        collection = UICollectionView.init(frame: CGRect.zero, collectionViewLayout: layout!)
+        collection?.delegate = self
+        collection?.dataSource = self
+        collection?.backgroundColor = UIColor.clear
+        collection?.register(type(of: UICollectionViewCell.init()), forCellWithReuseIdentifier: "cellId")
+        collection?.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(collection!)
+        
+        let viewDict:[String:Any] = ["collection":collection!]
+        
+        
+        self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[collection]-0-|", options: NSLayoutFormatOptions.alignAllTop, metrics: nil, views: viewDict))
+        self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[collection]-0-|", options: NSLayoutFormatOptions.alignAllTop, metrics: nil, views: viewDict))
+        
         // Do any additional setup after loading the view.
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
     }
-    */
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return funcItems.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        var cell:UICollectionViewCell? = collectionView.dequeueReusableCell(withReuseIdentifier: "cellId", for: indexPath)
+        if cell == nil {
+            cell = UICollectionViewCell.init()
+        }
+        cell?.backgroundColor = UIColor.gray
+        
+        var label:UILabel? = cell?.contentView.viewWithTag(100) as? UILabel
+        
+        if label == nil {
+            label = UILabel.init()
+            label?.tag = 100
+            label?.numberOfLines = 0
+            label?.textAlignment = NSTextAlignment.center
+            label?.translatesAutoresizingMaskIntoConstraints = false
+            cell?.contentView.addSubview(label!)
+            
+            cell?.contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[label]-0-|", options: NSLayoutFormatOptions.alignAllTop, metrics: nil, views: ["label":label!]))
+            cell?.contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[label]-0-|", options: NSLayoutFormatOptions.alignAllTop, metrics: nil, views: ["label":label!]))
+            
+        }
+        label?.text = funcItems[indexPath.row].rawValue
+        
+        return cell!
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("\(type(of: self)) \(#function) line: \(#line) \(funcItems[indexPath.row].rawValue)")
+        
+        switch funcItems[indexPath.row] {
+        case .networkSession:
+            let ctl = MySessionViewController()
+            ctl.navigationItem.title = FunctionDemo.networkSession.rawValue
+            
+            self.navigationController?.pushViewController(ctl, animated: true)
+        default:
+            print("table view did selected no")
+        }
+    }
 
 }

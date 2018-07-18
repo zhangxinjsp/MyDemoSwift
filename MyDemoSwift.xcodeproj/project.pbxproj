@@ -120,6 +120,8 @@
 		5BF5FE5620FD7974005D1ACA /* FuncMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BF5FE5520FD7974005D1ACA /* FuncMenuViewController.swift */; };
 		5BF5FE5820FD84E8005D1ACA /* TabbarTransitionAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BF5FE5720FD84E8005D1ACA /* TabbarTransitionAnimation.swift */; };
 		5BF5FE5A20FDDD1F005D1ACA /* NaviTransitionAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BF5FE5920FDDD1F005D1ACA /* NaviTransitionAnimation.swift */; };
+		5BF5FE5D20FDEE42005D1ACA /* MySessionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BF5FE5C20FDEE42005D1ACA /* MySessionViewController.swift */; };
+		5BF5FE5F20FDEE99005D1ACA /* MySessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BF5FE5E20FDEE99005D1ACA /* MySessionManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -242,6 +244,8 @@
 		5BF5FE5520FD7974005D1ACA /* FuncMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuncMenuViewController.swift; sourceTree = "<group>"; };
 		5BF5FE5720FD84E8005D1ACA /* TabbarTransitionAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabbarTransitionAnimation.swift; sourceTree = "<group>"; };
 		5BF5FE5920FDDD1F005D1ACA /* NaviTransitionAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaviTransitionAnimation.swift; sourceTree = "<group>"; };
+		5BF5FE5C20FDEE42005D1ACA /* MySessionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MySessionViewController.swift; sourceTree = "<group>"; };
+		5BF5FE5E20FDEE99005D1ACA /* MySessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MySessionManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -444,8 +448,26 @@
 			isa = PBXGroup;
 			children = (
 				5BF5FE5520FD7974005D1ACA /* FuncMenuViewController.swift */,
+				5BF5FE5B20FDEDC6005D1ACA /* NetworkSession */,
 			);
 			path = Func;
+			sourceTree = "<group>";
+		};
+		5BF5FE5B20FDEDC6005D1ACA /* NetworkSession */ = {
+			isa = PBXGroup;
+			children = (
+				5BF5FE5C20FDEE42005D1ACA /* MySessionViewController.swift */,
+				5BF5FE5E20FDEE99005D1ACA /* MySessionManager.swift */,
+				5BF5FE6220FF43CE005D1ACA /* RequestModel */,
+			);
+			path = NetworkSession;
+			sourceTree = "<group>";
+		};
+		5BF5FE6220FF43CE005D1ACA /* RequestModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = RequestModel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -623,6 +645,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5BF5FE5A20FDDD1F005D1ACA /* NaviTransitionAnimation.swift in Sources */,
+				5BF5FE5D20FDEE42005D1ACA /* MySessionViewController.swift in Sources */,
 				5BF5FE4D20FC40A5005D1ACA /* MyUIMenuViewController.swift in Sources */,
 				5BF5FE5320FC89B5005D1ACA /* MyPrint.swift in Sources */,
 				5BF5FE5620FD7974005D1ACA /* FuncMenuViewController.swift in Sources */,
@@ -632,6 +655,7 @@
 				5B339D3F1E851CD700B1DF75 /* AppDelegate.swift in Sources */,
 				5BF5FE5120FC40FA005D1ACA /* MyToolsMenuViewController.swift in Sources */,
 				5B9E26C31E8521EC00C855A3 /* MyTabBarController.swift in Sources */,
+				5BF5FE5F20FDEE99005D1ACA /* MySessionManager.swift in Sources */,
 				5B339D531E851FB400B1DF75 /* MyBaseViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
