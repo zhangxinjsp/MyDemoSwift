@@ -122,6 +122,8 @@
 		5BF5FE5A20FDDD1F005D1ACA /* NaviTransitionAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BF5FE5920FDDD1F005D1ACA /* NaviTransitionAnimation.swift */; };
 		5BF5FE5D20FDEE42005D1ACA /* MySessionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BF5FE5C20FDEE42005D1ACA /* MySessionViewController.swift */; };
 		5BF5FE5F20FDEE99005D1ACA /* MySessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BF5FE5E20FDEE99005D1ACA /* MySessionManager.swift */; };
+		5BF5FE6520FF6CF5005D1ACA /* rsa2048rootca.der in Resources */ = {isa = PBXBuildFile; fileRef = 5BF5FE6320FF6CF4005D1ACA /* rsa2048rootca.der */; };
+		5BF5FE6620FF6CF5005D1ACA /* PKIRootCA.der in Resources */ = {isa = PBXBuildFile; fileRef = 5BF5FE6420FF6CF5005D1ACA /* PKIRootCA.der */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -246,6 +248,8 @@
 		5BF5FE5920FDDD1F005D1ACA /* NaviTransitionAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaviTransitionAnimation.swift; sourceTree = "<group>"; };
 		5BF5FE5C20FDEE42005D1ACA /* MySessionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MySessionViewController.swift; sourceTree = "<group>"; };
 		5BF5FE5E20FDEE99005D1ACA /* MySessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MySessionManager.swift; sourceTree = "<group>"; };
+		5BF5FE6320FF6CF4005D1ACA /* rsa2048rootca.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = rsa2048rootca.der; sourceTree = "<group>"; };
+		5BF5FE6420FF6CF5005D1ACA /* PKIRootCA.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = PKIRootCA.der; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -300,6 +304,8 @@
 		5B9E278D1E88F32400C855A3 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				5BF5FE6420FF6CF5005D1ACA /* PKIRootCA.der */,
+				5BF5FE6320FF6CF4005D1ACA /* rsa2048rootca.der */,
 				5BF5FD9020FC2DF3005D1ACA /* aboutUs@2x.png */,
 				5BF5FD5E20FC2DEE005D1ACA /* accountBind@2x.png */,
 				5BF5FD7C20FC2DF1005D1ACA /* activeIcon@2x.png */,
@@ -534,6 +540,7 @@
 			files = (
 				5BF5FDED20FC2DF4005D1ACA /* myMessage@2x.png in Resources */,
 				5BF5FDD720FC2DF4005D1ACA /* weiboIconColor@2x.png in Resources */,
+				5BF5FE6520FF6CF5005D1ACA /* rsa2048rootca.der in Resources */,
 				5BF5FDB920FC2DF4005D1ACA /* activeIconSelected@2x.png in Resources */,
 				5BF5FDEF20FC2DF4005D1ACA /* img_placeholder.png in Resources */,
 				5BF5FE0120FC2DF5005D1ACA /* IMG_0431@2x.jpg in Resources */,
@@ -573,6 +580,7 @@
 				5BF5FDE820FC2DF4005D1ACA /* favoriteCircleSelected@2x.png in Resources */,
 				5BF5FE0820FC2DF5005D1ACA /* mask@2x.png in Resources */,
 				5BF5FDF920FC2DF5005D1ACA /* search@2x.jpg in Resources */,
+				5BF5FE6620FF6CF5005D1ACA /* PKIRootCA.der in Resources */,
 				5BF5FDC420FC2DF4005D1ACA /* vipSelectIcon@2x.png in Resources */,
 				5BF5FDCA20FC2DF4005D1ACA /* weChatIconColor@2x.png in Resources */,
 				5BF5FDE520FC2DF4005D1ACA /* infoIconSelected@2x.png in Resources */,

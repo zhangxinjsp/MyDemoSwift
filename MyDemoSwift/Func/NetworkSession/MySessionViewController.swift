@@ -41,9 +41,7 @@ class MySessionViewController: MyBaseViewController {
             "requestId" : "5330E853-237D-4B63-AF76-B409A6F8D8BD",
             "version" : "0100"
             ] as [String : Any]
-        
-        print("\(dict)")
-        
+
         do {
             let data = try JSONSerialization.data(withJSONObject: dict, options: JSONSerialization.WritingOptions.prettyPrinted)
             MySessionManager.shared.sendRequestWith(data: data)
@@ -52,7 +50,7 @@ class MySessionViewController: MyBaseViewController {
         }
         
         
-        
+//        MySessionManager.shared.downloadWithUrl(downloadUrl: "http://www.chery.cn/BrandShow/News?newsid=dc363897-9838-47fe-95b4-d3eeb14904d4")
         
         
         

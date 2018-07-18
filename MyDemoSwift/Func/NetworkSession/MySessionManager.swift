@@ -10,14 +10,16 @@ import UIKit
 import Foundation
 
 
-let url:String = "https://203.93.252.29:18088/cherym31t/command"
+//let url:String = "https://pkicatest.mychery.com:448/cherym31t/command";
+let url:String = "https://sh.syan.com.cn:7756/cherym31t/command";//信任站点
+//let url:String = "https://sh.syan.com.cn:7758/cherym31t/command";//不信任站点
+//let url:String = "https://203.93.252.29:18088/cherym31t/command"
 //let url:String = "https://203.93.252.40:8088/cherym31t/command";
 
-class MySessionManager: NSObject, URLSessionDelegate, URLSessionTaskDelegate, URLSessionDataDelegate {
+class MySessionManager: NSObject, URLSessionDelegate, URLSessionTaskDelegate, URLSessionDataDelegate, URLSessionDownloadDelegate {
     
     static let shared:MySessionManager = MySessionManager.init()
 
-    
     var session:URLSession = URLSession.shared
     
     private override init() {
@@ -55,11 +57,21 @@ class MySessionManager: NSObject, URLSessionDelegate, URLSessionTaskDelegate, UR
         let req = self.createRequestWith(data: data)
         
         let task:URLSessionDataTask = session.dataTask(with: req as URLRequest)
+        
         task.resume()
         
     }
     
-    func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+    public func downloadWithUrl(downloadUrl:String) {
+        
+        let task:URLSessionDownloadTask = session.downloadTask(with: URL.init(string: downloadUrl)!)
+        
+        task.resume()
+        
+    }
+    
+    /************************ MARK session task delegate ************************/
+    func urlSession(_ session: URLSession, task: URLSessionTask, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
         
         print("\(type(of: self)) \(#function) line: \(#line) ")
         
@@ -67,77 +79,79 @@ class MySessionManager: NSObject, URLSessionDelegate, URLSessionTaskDelegate, UR
             return
         }
         
-        /*
-         SecTrustRef serverTrust = challenge.protectionSpace.serverTrust;
-         NSCAssert(serverTrust != nil, @"serverTrust is nil");
-         //导入CA证书（Certification Authority，支持SSL证书以及自签名的CA）
-         NSString *cerPath = [[NSBundle mainBundle] pathForResource:@"PKIRootCA" ofType:@"der"];//自签名证书
-         //    NSString *cerPath = [[NSBundle mainBundle] pathForResource:@"rsa2048rootca" ofType:@"der"];//自签名证书
-         NSData* certData = [NSData dataWithContentsOfFile:cerPath];
-         if (certData == nil) {
-         LOGINFO(@"certificate file is empty");
-         completionHandler(NSURLSessionAuthChallengeCancelAuthenticationChallenge, nil);
-         return;
-         }
-         
-         SecCertificateRef caRef = SecCertificateCreateWithData(kCFAllocatorDefault, (CFDataRef)certData);
-         if (caRef == nil) {
-         LOGINFO(@"certificate create failed ");
-         completionHandler(NSURLSessionAuthChallengeCancelAuthenticationChallenge, nil);
-         return;
-         }
-         
-         NSArray *caArray = @[(__bridge id)(caRef)];
-         
-         OSStatus status = SecTrustSetAnchorCertificates(serverTrust, (__bridge CFArrayRef)caArray);
-         if (status != errSecSuccess) {
-         LOGINFO(@"set trust anchor certificate failed:%d", status);
-         completionHandler(NSURLSessionAuthChallengeCancelAuthenticationChallenge, nil);
-         return;
-         }
-         
-         CFArrayRef originalPolicies;
-         SecTrustCopyPolicies(serverTrust, &originalPolicies);
-         //kSecRevocationRequirePositiveResponse 对新地址有问题
-         SecPolicyRef revocationPolicy = SecPolicyCreateRevocation(kSecRevocationOCSPMethod | kSecRevocationRequirePositiveResponse);
-         NSArray *policies = [(__bridge NSArray *)originalPolicies arrayByAddingObject:(__bridge id)revocationPolicy];
-         
-         status = SecTrustSetPolicies(serverTrust, (__bridge CFTypeRef _Nonnull)(policies));
-         if (status != errSecSuccess) {
-         LOGINFO(@"set policies error status:%d", status);
-         completionHandler(NSURLSessionAuthChallengeCancelAuthenticationChallenge, nil);
-         return;
-         }
-         
-         SecTrustResultType result = kSecTrustResultInvalid;
-         status = SecTrustEvaluate(serverTrust, &result);
-         LOGINFO(@"stutas: %d, Result: %d" , (int)status, result);
-         
-         if (status != errSecSuccess || (result != kSecTrustResultUnspecified && result != kSecTrustResultProceed)) {
-         LOGINFO(@"error; not allow connect");
-         completionHandler(NSURLSessionAuthChallengeCancelAuthenticationChallenge, nil);
-         return;
-         }
-         */
-        
+        let serverTrust:SecTrust? = challenge.protectionSpace.serverTrust;
+        assert(serverTrust != nil, "serverTrust is nil")
+        //导入CA证书（Certification Authority，支持SSL证书以及自签名的CA）
+        let cerPath = Bundle.main.path(forResource: "PKIRootCA", ofType: "der")//自签名证书
+//        let cerPath = Bundle.main.path(forResource: "rsa2048rootca", ofType: "der")//自签名证书
+
+        var certData:Data?
+        do {
+            certData = try Data.init(contentsOf: URL.init(fileURLWithPath: cerPath!))
+        } catch {
+            completionHandler(URLSession.AuthChallengeDisposition.cancelAuthenticationChallenge, nil);
+            return
+        }
+
+        if (certData == nil) {
+            completionHandler(URLSession.AuthChallengeDisposition.cancelAuthenticationChallenge, nil);
+            return;
+        }
+
+        let caRef:SecCertificate? = SecCertificateCreateWithData(kCFAllocatorDefault, certData! as CFData)
+        if (caRef == nil) {
+            completionHandler(URLSession.AuthChallengeDisposition.cancelAuthenticationChallenge, nil);
+            return;
+        }
+
+        let caArray:Array = [caRef];
+        var status:OSStatus = SecTrustSetAnchorCertificates(serverTrust!, caArray as CFArray)
+        if (status != errSecSuccess) {
+
+            completionHandler(URLSession.AuthChallengeDisposition.cancelAuthenticationChallenge, nil);
+            return;
+        }
+
+        var originalPolicies:CFArray?;
+        SecTrustCopyPolicies(serverTrust!, &originalPolicies);
+        //kSecRevocationRequirePositiveResponse 对新地址有问题
+        let revocationPolicy:SecPolicy? = SecPolicyCreateRevocation(kSecRevocationOCSPMethod | kSecRevocationRequirePositiveResponse)
+        var policies:Array<SecPolicy> = (originalPolicies as! Array)
+        policies.append(revocationPolicy!)
+
+        status = SecTrustSetPolicies(serverTrust!, policies as CFTypeRef)
+        if (status != errSecSuccess) {
+            completionHandler(URLSession.AuthChallengeDisposition.cancelAuthenticationChallenge, nil);
+            return;
+        }
+
+        var result:SecTrustResultType = SecTrustResultType.invalid
+        status = SecTrustEvaluate(serverTrust!, &result);
+        print("stutas: \(status), Result:  \(result.rawValue)");
+
+        if (status != errSecSuccess || (result != SecTrustResultType.unspecified && result != SecTrustResultType.proceed)) {
+            print("error; not allow connect");
+            completionHandler(URLSession.AuthChallengeDisposition.cancelAuthenticationChallenge, nil);
+            return;
+        }
         // 创建凭据对象
         let credential:URLCredential = URLCredential.init(trust: challenge.protectionSpace.serverTrust!)
-        
         // 通过completionHandler告诉服务器信任证书
         completionHandler(URLSession.AuthChallengeDisposition.useCredential, credential)
         
         
     }
     
+    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+        
+        print("\(type(of: self)) \(#function) line: \(#line) \(String(describing: error?.localizedDescription))")
+    }
+    
+    /************************ MARK  Session Data Delegate ************************/
     func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse, completionHandler: @escaping (URLSession.ResponseDisposition) -> Void) {
         
         print("\(response)")
         completionHandler(URLSession.ResponseDisposition.allow)
-    }
-    
-    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-        
-        print("\(type(of: self)) \(#function) line: \(#line) \(String(describing: error?.localizedDescription))")
     }
     
     func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
@@ -153,8 +167,14 @@ class MySessionManager: NSObject, URLSessionDelegate, URLSessionTaskDelegate, UR
         }
     }
     
+    /************************ MARK Session Download Delegate ************************/
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
+        print("\(totalBytesWritten / totalBytesExpectedToWrite)")
+    }
     
-    
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
+        print("\(location)")
+    }
     
     
 }
