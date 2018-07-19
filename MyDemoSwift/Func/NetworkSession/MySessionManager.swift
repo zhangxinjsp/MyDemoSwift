@@ -19,7 +19,10 @@ let url:String = "https://sh.syan.com.cn:7756/cherym31t/command";//信任站点
 class MySessionManager: NSObject, URLSessionDelegate, URLSessionTaskDelegate, URLSessionDataDelegate, URLSessionDownloadDelegate {
     
     static let shared:MySessionManager = MySessionManager.init()
-
+    
+    var callbackDict:[Int : (Any?, Error?)->Swift.Void] = [:]
+    var receiveDict:[Int : Any] = [:]
+    
     var session:URLSession = URLSession.shared
     
     private override init() {
@@ -38,8 +41,6 @@ class MySessionManager: NSObject, URLSessionDelegate, URLSessionTaskDelegate, UR
         
         session = URLSession.init(configuration: config, delegate: self, delegateQueue: nil)
         
-//        self.sendRequestWith(data: nil)
-        
     }
     
     private func createRequestWith(data:Data) -> NSMutableURLRequest {
@@ -52,28 +53,28 @@ class MySessionManager: NSObject, URLSessionDelegate, URLSessionTaskDelegate, UR
         return req
     }
     
-    public func sendRequestWith(data:Data) {
+    public func sendRequestWith(mode:Any, callback: @escaping (Any?, Error?)->Swift.Void) {
         
-        let req = self.createRequestWith(data: data)
+        let req = self.createRequestWith(data: mode as! Data)
         
         let task:URLSessionDataTask = session.dataTask(with: req as URLRequest)
         
-        task.resume()
+        callbackDict.updateValue(callback, forKey: task.taskIdentifier)
         
+        task.resume()
     }
     
-    public func downloadWithUrl(downloadUrl:String) {
+    public func downloadWithUrl(downloadUrl:String, callback: @escaping (Any?, Error?)->Swift.Void) {
         
         let task:URLSessionDownloadTask = session.downloadTask(with: URL.init(string: downloadUrl)!)
-        
+        callbackDict.updateValue(callback, forKey: task.taskIdentifier)
         task.resume()
-        
     }
     
     /************************ MARK session task delegate ************************/
     func urlSession(_ session: URLSession, task: URLSessionTask, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
         
-        print("\(type(of: self)) \(#function) line: \(#line) ")
+        print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) ")
         
         if challenge.protectionSpace.authenticationMethod != NSURLAuthenticationMethodServerTrust {
             return
@@ -127,10 +128,10 @@ class MySessionManager: NSObject, URLSessionDelegate, URLSessionTaskDelegate, UR
 
         var result:SecTrustResultType = SecTrustResultType.invalid
         status = SecTrustEvaluate(serverTrust!, &result);
-        print("stutas: \(status), Result:  \(result.rawValue)");
+        print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) stutas: \(status), Result:  \(result.rawValue)");
 
         if (status != errSecSuccess || (result != SecTrustResultType.unspecified && result != SecTrustResultType.proceed)) {
-            print("error; not allow connect");
+            print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) error; not allow connect");
             completionHandler(URLSession.AuthChallengeDisposition.cancelAuthenticationChallenge, nil);
             return;
         }
@@ -144,36 +145,72 @@ class MySessionManager: NSObject, URLSessionDelegate, URLSessionTaskDelegate, UR
     
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
         
-        print("\(type(of: self)) \(#function) line: \(#line) \(String(describing: error?.localizedDescription))")
+        print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) \(String(describing: error?.localizedDescription))")
+        print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) \(type(of: task))")
+        
+        if task.isKind(of: URLSessionDownloadTask.self) {
+            print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) URLSessionDownloadTask id : \(task.taskIdentifier)")
+        }
+        if task.isKind(of: URLSessionDataTask.self) {
+            print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) URLSessionDataTask id : \(task.taskIdentifier)")
+        }
+        DispatchQueue.main.async {
+            let callback:(Any?, Error?)->Swift.Void = self.callbackDict[task.taskIdentifier]!
+            callback(self.receiveDict[task.taskIdentifier], error)
+        }
     }
     
     /************************ MARK  Session Data Delegate ************************/
     func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse, completionHandler: @escaping (URLSession.ResponseDisposition) -> Void) {
         
-        print("\(response)")
+        print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) \(response)")
         completionHandler(URLSession.ResponseDisposition.allow)
     }
     
     func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
         
-        print("\(type(of: self)) \(#function) line: \(#line) \(data)")
+        print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) \(data)")
         
         do {
             let dict = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableLeaves)
-            print("\(dict)")
+            
+            receiveDict.updateValue(dict, forKey: dataTask.taskIdentifier)
+            
+            print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) \(dict)")
         } catch  {
             let str:String? = String(data: data, encoding: String.Encoding.utf8)
-            print("\(String(describing: str))")
+            print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) \(String(describing: str))")
         }
     }
     
     /************************ MARK Session Download Delegate ************************/
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
-        print("\(totalBytesWritten / totalBytesExpectedToWrite)")
+        print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) Download completion per : \(totalBytesWritten / totalBytesExpectedToWrite)")
     }
     
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
-        print("\(location)")
+        print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) \(location)")
+        
+        var fileName = downloadTask.originalRequest?.url?.query
+        if fileName?.count == 0 {
+            fileName = downloadTask.originalRequest?.url?.lastPathComponent
+        }
+        
+        var cachesPaths = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.cachesDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
+        let savePath = URL.init(fileURLWithPath: cachesPaths[0]).appendingPathComponent(fileName!)
+        
+        do {
+            try FileManager.default.removeItem(at: savePath)
+        } catch {
+            print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) \(savePath)")
+        }
+    
+        do {
+            try FileManager.default.moveItem(at: location, to: savePath)
+            receiveDict.updateValue(savePath.path, forKey: downloadTask.taskIdentifier)
+        } catch {
+            print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) \(savePath)")
+        }
     }
     
     

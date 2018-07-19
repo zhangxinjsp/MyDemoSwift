@@ -20,7 +20,7 @@ class MyTabBarController: UITabBarController, UITabBarControllerDelegate {
     override func loadView() {
         super.loadView()
 //        String str = str
-//        print("\(type(of: self)) \(#function) line: \(#line)")
+//        print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) ")
     }
     
     override func viewDidLoad() {
@@ -60,13 +60,13 @@ class MyTabBarController: UITabBarController, UITabBarControllerDelegate {
     
     //MARK: tab bar controller delegate
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
-        print("\(type(of: self)) \(#function) line: \(#line)")
+        print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) ")
         return true
     }
     
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         
-        print("\(type(of: self)) \(#function) line: \(#line) \(viewController.tabBarItem.tag)")
+        print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) \(viewController.tabBarItem.tag)")
     }
 
     func tabBarController(_ tabBarController: UITabBarController, interactionControllerFor animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {

@@ -90,7 +90,7 @@ class FuncMenuViewController: MyBaseViewController, UICollectionViewDataSource, 
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("\(type(of: self)) \(#function) line: \(#line) \(funcItems[indexPath.row].rawValue)")
+        print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) \(funcItems[indexPath.row].rawValue)")
         
         switch funcItems[indexPath.row] {
         case .networkSession:
@@ -99,7 +99,7 @@ class FuncMenuViewController: MyBaseViewController, UICollectionViewDataSource, 
             
             self.navigationController?.pushViewController(ctl, animated: true)
         default:
-            print("table view did selected no")
+            print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) table view did selected no")
         }
     }
 
