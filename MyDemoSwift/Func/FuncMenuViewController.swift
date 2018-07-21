@@ -10,14 +10,14 @@ import UIKit
 
 enum FunctionDemo: String {
     case networkSession
-    case test1
+    case runTime
     case test2
     case test3
 }
 
 class FuncMenuViewController: MyBaseViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     
-    let funcItems:[FunctionDemo] = [.networkSession, .test1, .test2, .test3]
+    let funcItems:[FunctionDemo] = [.networkSession, .runTime, .test2, .test3]
     
 
     var layout:UICollectionViewFlowLayout? = UICollectionViewFlowLayout.init()
@@ -96,8 +96,13 @@ class FuncMenuViewController: MyBaseViewController, UICollectionViewDataSource, 
         case .networkSession:
             let ctl = MySessionViewController()
             ctl.navigationItem.title = FunctionDemo.networkSession.rawValue
-            
             self.navigationController?.pushViewController(ctl, animated: true)
+            
+        case .runTime:
+            let ctl = MyRunTimeViewController()
+            ctl.navigationItem.title = FunctionDemo.runTime.rawValue
+            self.navigationController?.pushViewController(ctl, animated: true)
+            
         default:
             print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) table view did selected no")
         }

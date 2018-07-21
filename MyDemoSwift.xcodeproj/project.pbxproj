@@ -12,6 +12,8 @@
 		5B339D531E851FB400B1DF75 /* MyBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B339D521E851FB400B1DF75 /* MyBaseViewController.swift */; };
 		5B9E26C11E85217400C855A3 /* MyNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B9E26C01E85217400C855A3 /* MyNavigationController.swift */; };
 		5B9E26C31E8521EC00C855A3 /* MyTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B9E26C21E8521EC00C855A3 /* MyTabBarController.swift */; };
+		5BE4C00721008D5C0067315C /* MyRunTimeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BE4C00621008D5C0067315C /* MyRunTimeViewController.swift */; };
+		5BE4C00921008ECC0067315C /* MyRunTimeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BE4C00821008ECC0067315C /* MyRunTimeModel.swift */; };
 		5BF5FDB720FC2DF4005D1ACA /* bottomBarImage@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BF5FD5220FC2DED005D1ACA /* bottomBarImage@2x.png */; };
 		5BF5FDB820FC2DF4005D1ACA /* weChatIconWhite@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BF5FD5320FC2DED005D1ACA /* weChatIconWhite@2x.png */; };
 		5BF5FDB920FC2DF4005D1ACA /* activeIconSelected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BF5FD5420FC2DED005D1ACA /* activeIconSelected@2x.png */; };
@@ -134,6 +136,8 @@
 		5B339D521E851FB400B1DF75 /* MyBaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyBaseViewController.swift; sourceTree = "<group>"; };
 		5B9E26C01E85217400C855A3 /* MyNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyNavigationController.swift; sourceTree = "<group>"; };
 		5B9E26C21E8521EC00C855A3 /* MyTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTabBarController.swift; sourceTree = "<group>"; };
+		5BE4C00621008D5C0067315C /* MyRunTimeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyRunTimeViewController.swift; sourceTree = "<group>"; };
+		5BE4C00821008ECC0067315C /* MyRunTimeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyRunTimeModel.swift; sourceTree = "<group>"; };
 		5BF5FD5220FC2DED005D1ACA /* bottomBarImage@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bottomBarImage@2x.png"; sourceTree = "<group>"; };
 		5BF5FD5320FC2DED005D1ACA /* weChatIconWhite@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "weChatIconWhite@2x.png"; sourceTree = "<group>"; };
 		5BF5FD5420FC2DED005D1ACA /* activeIconSelected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "activeIconSelected@2x.png"; sourceTree = "<group>"; };
@@ -378,6 +382,15 @@
 			path = Resource;
 			sourceTree = "<group>";
 		};
+		5BE4C00521008D090067315C /* RunTime */ = {
+			isa = PBXGroup;
+			children = (
+				5BE4C00621008D5C0067315C /* MyRunTimeViewController.swift */,
+				5BE4C00821008ECC0067315C /* MyRunTimeModel.swift */,
+			);
+			path = RunTime;
+			sourceTree = "<group>";
+		};
 		5BF5FD9120FC2DF4005D1ACA /* News */ = {
 			isa = PBXGroup;
 			children = (
@@ -454,6 +467,7 @@
 			isa = PBXGroup;
 			children = (
 				5BF5FE5520FD7974005D1ACA /* FuncMenuViewController.swift */,
+				5BE4C00521008D090067315C /* RunTime */,
 				5BF5FE5B20FDEDC6005D1ACA /* NetworkSession */,
 			);
 			path = Func;
@@ -464,16 +478,8 @@
 			children = (
 				5BF5FE5C20FDEE42005D1ACA /* MySessionViewController.swift */,
 				5BF5FE5E20FDEE99005D1ACA /* MySessionManager.swift */,
-				5BF5FE6220FF43CE005D1ACA /* RequestModel */,
 			);
 			path = NetworkSession;
-			sourceTree = "<group>";
-		};
-		5BF5FE6220FF43CE005D1ACA /* RequestModel */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = RequestModel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -652,11 +658,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5BE4C00921008ECC0067315C /* MyRunTimeModel.swift in Sources */,
 				5BF5FE5A20FDDD1F005D1ACA /* NaviTransitionAnimation.swift in Sources */,
 				5BF5FE5D20FDEE42005D1ACA /* MySessionViewController.swift in Sources */,
 				5BF5FE4D20FC40A5005D1ACA /* MyUIMenuViewController.swift in Sources */,
 				5BF5FE5320FC89B5005D1ACA /* MyPrint.swift in Sources */,
 				5BF5FE5620FD7974005D1ACA /* FuncMenuViewController.swift in Sources */,
+				5BE4C00721008D5C0067315C /* MyRunTimeViewController.swift in Sources */,
 				5B9E26C11E85217400C855A3 /* MyNavigationController.swift in Sources */,
 				5BF5FE4F20FC40BF005D1ACA /* ThirdMenuViewController.swift in Sources */,
 				5BF5FE5820FD84E8005D1ACA /* TabbarTransitionAnimation.swift in Sources */,

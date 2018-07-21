@@ -77,6 +77,7 @@ class MySessionManager: NSObject, URLSessionDelegate, URLSessionTaskDelegate, UR
         print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) ")
         
         if challenge.protectionSpace.authenticationMethod != NSURLAuthenticationMethodServerTrust {
+            print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) service authentication method is not trust")
             return
         }
         
@@ -90,17 +91,20 @@ class MySessionManager: NSObject, URLSessionDelegate, URLSessionTaskDelegate, UR
         do {
             certData = try Data.init(contentsOf: URL.init(fileURLWithPath: cerPath!))
         } catch {
+            print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) \(error)")
             completionHandler(URLSession.AuthChallengeDisposition.cancelAuthenticationChallenge, nil);
             return
         }
 
         if (certData == nil) {
+            print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) certificate is nil")
             completionHandler(URLSession.AuthChallengeDisposition.cancelAuthenticationChallenge, nil);
             return;
         }
 
         let caRef:SecCertificate? = SecCertificateCreateWithData(kCFAllocatorDefault, certData! as CFData)
         if (caRef == nil) {
+            print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) certificate create failed")
             completionHandler(URLSession.AuthChallengeDisposition.cancelAuthenticationChallenge, nil);
             return;
         }
@@ -108,7 +112,7 @@ class MySessionManager: NSObject, URLSessionDelegate, URLSessionTaskDelegate, UR
         let caArray:Array = [caRef];
         var status:OSStatus = SecTrustSetAnchorCertificates(serverTrust!, caArray as CFArray)
         if (status != errSecSuccess) {
-
+            print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) set trust anchor certificate faileds")
             completionHandler(URLSession.AuthChallengeDisposition.cancelAuthenticationChallenge, nil);
             return;
         }
@@ -122,6 +126,7 @@ class MySessionManager: NSObject, URLSessionDelegate, URLSessionTaskDelegate, UR
 
         status = SecTrustSetPolicies(serverTrust!, policies as CFTypeRef)
         if (status != errSecSuccess) {
+            print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) set trust policy failed")
             completionHandler(URLSession.AuthChallengeDisposition.cancelAuthenticationChallenge, nil);
             return;
         }
@@ -139,7 +144,6 @@ class MySessionManager: NSObject, URLSessionDelegate, URLSessionTaskDelegate, UR
         let credential:URLCredential = URLCredential.init(trust: challenge.protectionSpace.serverTrust!)
         // 通过completionHandler告诉服务器信任证书
         completionHandler(URLSession.AuthChallengeDisposition.useCredential, credential)
-        
         
     }
     
@@ -202,14 +206,14 @@ class MySessionManager: NSObject, URLSessionDelegate, URLSessionTaskDelegate, UR
         do {
             try FileManager.default.removeItem(at: savePath)
         } catch {
-            print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) \(savePath)")
+            print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) \(error)")
         }
     
         do {
             try FileManager.default.moveItem(at: location, to: savePath)
             receiveDict.updateValue(savePath.path, forKey: downloadTask.taskIdentifier)
         } catch {
-            print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) \(savePath)")
+            print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) \(error)")
         }
     }
     
