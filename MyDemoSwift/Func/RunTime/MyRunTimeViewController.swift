@@ -18,10 +18,13 @@ class MyRunTimeViewController: MyBaseViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        self.modeToDict()
+        self.modeAndDictTranfer()
 
         
+        self.ctreateObject()
         
+        self.addProperty()
+        self.fetchProperty()
         
     }
 
@@ -152,6 +155,136 @@ class MyRunTimeViewController: MyBaseViewController {
     }
     
     /******************** mode dict transfer end  ***********************/
+    
+    /******************** create object start  ***********************/
+    func ctreateObject() {
+
+        let dict:[String : Any] = ["name" : "jack",
+                                   "age": 35,
+                                   "sex": "man",
+                                   "height": 182.2,
+                                   "weight": 95,
+                                   "undefine": "95",
+                                   ]
+        //MARK method one
+        let cls = objc_getClass("MyDemoSwift.MyRunTimeModel") as! NSObject.Type
+        print("\(String(describing: cls))")
+        let mode = cls.init()
+        mode .setValuesForKeys(dict)
+        print("\(mode.description)")
+
+        //MARK method twos
+        let cls2 = NSClassFromString("MyDemoSwift.MyOCParmModel") as! NSObject.Type
+        let mode2 = cls2.init()
+        mode2.setValuesForKeys(dict)
+        print("\(mode2.description)")
+        
+        //MARK method three
+        let cls3 = objc_allocateClassPair(NSObject.self, "MyTestMode", 0) as! NSObject.Type
+        
+        let success = class_addIvar(cls3, "name", MemoryLayout.size(ofValue: CChar.self), UInt8(MemoryLayout.size(ofValue: CChar.self)), "@String")
+        print("\(success)")
+/*
+         c          A char
+         i          An int
+         s          A short
+         l          A longl is treated as a 32-bit quantity on 64-bit programs.
+         q          A long long
+         C          An unsigned char
+         I          An unsigned int
+         S          An unsigned short
+         L          An unsigned long
+         Q          An unsigned long long
+         f          A float
+         d          A double
+         B          A C++ bool or a C99 _Bool
+         @NSString  String
+         @String    String
+ */
+        objc_registerClassPair(cls3)
+        
+        let model3 = cls3.init()
+//        model3.setValuesForKeys(["name" : "123"])
+        
+        var count:UInt32 = 0
+        let varList = class_copyIvarList(type(of: model3), &count)
+
+        for i in 0..<count {
+            let ivar = varList?[Int(i)]
+
+            let name = ivar_getName(ivar!)
+            print("index: \(i) - key: \(String(describing: String(cString: name!)))")
+            
+            model3.setValue(dict[String(cString: name!)], forKey: String(cString: name!))
+        }
+        print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) \(String(describing: object_getClass(model3.value(forKey: "name"))))")
+        print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) \(String(describing: model3.value(forKey: "name")))")
+//        print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) \(model3.value(forKey: "name") as! String)")
+
+    }
+    
+    /******************** create object end  ***********************/
+    
+    /******************** property start  ***********************/
+    func addProperty() {
+        
+        let proAttr = [objc_property_attribute_t(name: "T", value: "f"),
+                       objc_property_attribute_t(name: "V", value: "")
+        ]
+        
+        class_addProperty(type(of: people), "und", proAttr, UInt32(proAttr.count))
+    }
+    
+    func fetchProperty() {
+        
+        var count:UInt32 = 0;
+        //    获取属性列表
+        let propertys = class_copyPropertyList(type(of: people), &count);
+        for i in 0..<count {
+            let property = propertys![Int(i)]
+            
+            print("\n\(String(cString:property_getName(property)))")
+            
+            var attrCount:UInt32 = 0
+            let attrs = property_copyAttributeList(property, &attrCount);
+            for j in 0..<attrCount {
+                let attr = attrs![Int(j)]
+                
+                print("\(String(cString: attr.name))  \(String(cString: attr.value))")
+                
+//                if (attr.name[0] == 'T') {
+//                    size_t len = strlen(attrs[i].value);
+//                    if (len>3) {
+//                        char name1[len - 2];
+//                        name1[len - 3] = '\0';
+//                        memcpy(name1, attrs[i].value + 2, len - 3);
+//                    NSLog(@"%s", name1);
+//                    _typeClass = objc_getClass(name1);
+//                    }
+//                }
+            }
+        }
+    }
+    /******************** property end ***********************/
+    
+    
+    func aadfadfasdf() {
+//        objc_msg
+//        class_addMethod(<#T##cls: AnyClass?##AnyClass?#>, <#T##name: Selector##Selector#>, <#T##imp: IMP##IMP#>, <#T##types: UnsafePointer<Int8>?##UnsafePointer<Int8>?#>)
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
