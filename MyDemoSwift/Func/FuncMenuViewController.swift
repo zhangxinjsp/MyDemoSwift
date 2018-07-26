@@ -11,13 +11,14 @@ import UIKit
 enum FunctionDemo: String {
     case networkSession
     case runTime
-    case test2
-    case test3
+    case BleCentral
+    case BlePeripheral
+    case def
 }
 
 class FuncMenuViewController: MyBaseViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     
-    let funcItems:[FunctionDemo] = [.networkSession, .runTime, .test2, .test3]
+    let funcItems:[FunctionDemo] = [.networkSession, .runTime, .BleCentral, .BlePeripheral]
     
 
     var layout:UICollectionViewFlowLayout? = UICollectionViewFlowLayout.init()
@@ -101,6 +102,16 @@ class FuncMenuViewController: MyBaseViewController, UICollectionViewDataSource, 
         case .runTime:
             let ctl = MyRunTimeViewController()
             ctl.navigationItem.title = FunctionDemo.runTime.rawValue
+            self.navigationController?.pushViewController(ctl, animated: true)
+            
+        case .BleCentral:
+            let ctl = MyCentralViewController()
+            ctl.navigationItem.title = FunctionDemo.BleCentral.rawValue
+            self.navigationController?.pushViewController(ctl, animated: true)
+            
+        case .BlePeripheral:
+            let ctl = MyPeripheralViewController()
+            ctl.navigationItem.title = FunctionDemo.BlePeripheral.rawValue
             self.navigationController?.pushViewController(ctl, animated: true)
             
         default:

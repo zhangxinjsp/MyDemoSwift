@@ -10,6 +10,10 @@
 		5B339D3F1E851CD700B1DF75 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B339D3E1E851CD700B1DF75 /* AppDelegate.swift */; };
 		5B339D461E851CD700B1DF75 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5B339D451E851CD700B1DF75 /* Assets.xcassets */; };
 		5B339D531E851FB400B1DF75 /* MyBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B339D521E851FB400B1DF75 /* MyBaseViewController.swift */; };
+		5B6444722108154300483E4D /* MyCentralViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6444712108154300483E4D /* MyCentralViewController.swift */; };
+		5B6444742108156600483E4D /* MyPeripheralViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6444732108156600483E4D /* MyPeripheralViewController.swift */; };
+		5B6444762108165A00483E4D /* PeripheralManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6444752108165A00483E4D /* PeripheralManager.swift */; };
+		5B6444782108166B00483E4D /* CentralManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6444772108166B00483E4D /* CentralManager.swift */; };
 		5B9E26C11E85217400C855A3 /* MyNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B9E26C01E85217400C855A3 /* MyNavigationController.swift */; };
 		5B9E26C31E8521EC00C855A3 /* MyTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B9E26C21E8521EC00C855A3 /* MyTabBarController.swift */; };
 		5BE4C00721008D5C0067315C /* MyRunTimeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BE4C00621008D5C0067315C /* MyRunTimeViewController.swift */; };
@@ -134,6 +138,10 @@
 		5B339D451E851CD700B1DF75 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5B339D4A1E851CD700B1DF75 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5B339D521E851FB400B1DF75 /* MyBaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyBaseViewController.swift; sourceTree = "<group>"; };
+		5B6444712108154300483E4D /* MyCentralViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCentralViewController.swift; sourceTree = "<group>"; };
+		5B6444732108156600483E4D /* MyPeripheralViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPeripheralViewController.swift; sourceTree = "<group>"; };
+		5B6444752108165A00483E4D /* PeripheralManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeripheralManager.swift; sourceTree = "<group>"; };
+		5B6444772108166B00483E4D /* CentralManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CentralManager.swift; sourceTree = "<group>"; };
 		5B9E26C01E85217400C855A3 /* MyNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyNavigationController.swift; sourceTree = "<group>"; };
 		5B9E26C21E8521EC00C855A3 /* MyTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTabBarController.swift; sourceTree = "<group>"; };
 		5BE4C00621008D5C0067315C /* MyRunTimeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyRunTimeViewController.swift; sourceTree = "<group>"; };
@@ -305,6 +313,17 @@
 			path = MyDemoSwift;
 			sourceTree = "<group>";
 		};
+		5B644470210814F800483E4D /* BLE */ = {
+			isa = PBXGroup;
+			children = (
+				5B6444712108154300483E4D /* MyCentralViewController.swift */,
+				5B6444772108166B00483E4D /* CentralManager.swift */,
+				5B6444732108156600483E4D /* MyPeripheralViewController.swift */,
+				5B6444752108165A00483E4D /* PeripheralManager.swift */,
+			);
+			path = BLE;
+			sourceTree = "<group>";
+		};
 		5B9E278D1E88F32400C855A3 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
@@ -467,6 +486,7 @@
 			isa = PBXGroup;
 			children = (
 				5BF5FE5520FD7974005D1ACA /* FuncMenuViewController.swift */,
+				5B644470210814F800483E4D /* BLE */,
 				5BE4C00521008D090067315C /* RunTime */,
 				5BF5FE5B20FDEDC6005D1ACA /* NetworkSession */,
 			);
@@ -517,6 +537,11 @@
 						DevelopmentTeam = 6773LQR8YW;
 						LastSwiftMigration = 0940;
 						ProvisioningStyle = Manual;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -661,15 +686,19 @@
 				5BE4C00921008ECC0067315C /* MyRunTimeModel.swift in Sources */,
 				5BF5FE5A20FDDD1F005D1ACA /* NaviTransitionAnimation.swift in Sources */,
 				5BF5FE5D20FDEE42005D1ACA /* MySessionViewController.swift in Sources */,
+				5B6444762108165A00483E4D /* PeripheralManager.swift in Sources */,
 				5BF5FE4D20FC40A5005D1ACA /* MyUIMenuViewController.swift in Sources */,
 				5BF5FE5320FC89B5005D1ACA /* MyPrint.swift in Sources */,
 				5BF5FE5620FD7974005D1ACA /* FuncMenuViewController.swift in Sources */,
+				5B6444722108154300483E4D /* MyCentralViewController.swift in Sources */,
 				5BE4C00721008D5C0067315C /* MyRunTimeViewController.swift in Sources */,
 				5B9E26C11E85217400C855A3 /* MyNavigationController.swift in Sources */,
 				5BF5FE4F20FC40BF005D1ACA /* ThirdMenuViewController.swift in Sources */,
 				5BF5FE5820FD84E8005D1ACA /* TabbarTransitionAnimation.swift in Sources */,
 				5B339D3F1E851CD700B1DF75 /* AppDelegate.swift in Sources */,
+				5B6444742108156600483E4D /* MyPeripheralViewController.swift in Sources */,
 				5BF5FE5120FC40FA005D1ACA /* MyToolsMenuViewController.swift in Sources */,
+				5B6444782108166B00483E4D /* CentralManager.swift in Sources */,
 				5B9E26C31E8521EC00C855A3 /* MyTabBarController.swift in Sources */,
 				5BF5FE5F20FDEE99005D1ACA /* MySessionManager.swift in Sources */,
 				5B339D531E851FB400B1DF75 /* MyBaseViewController.swift in Sources */,

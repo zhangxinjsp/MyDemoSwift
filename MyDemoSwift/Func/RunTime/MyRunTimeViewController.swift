@@ -96,17 +96,17 @@ class MyRunTimeViewController: MyBaseViewController {
             let ivar = varList?[Int(i)]
             
             let typecod = ivar_getTypeEncoding(ivar!)
-            print("\(i) ---- \(NSString.localizedStringWithFormat("%s", typecod!))")
+            print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) \(i) ---- \(NSString.localizedStringWithFormat("%s", typecod!))")
             
             let name = ivar_getName(ivar!)
-            print("\(i) ---- \(String(describing: String(cString: name!)))")
+            print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) \(i) ---- \(String(describing: String(cString: name!)))")
             
             let offset = ivar_getOffset(ivar!)
-            print("\(i) ---- \(offset)")
+            print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) \(i) ---- \(offset)")
             
             let value = dict[String(cString: name!)]
             object_setIvar(people, ivar!, value)
-            print("\(i) ---- \(String(describing: value))")
+            print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) \(i) ---- \(String(describing: value))")
         }
 
         print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) \(people.description)")
@@ -147,11 +147,11 @@ class MyRunTimeViewController: MyBaseViewController {
 //            let value = object_getIvar(people, ivar!)
             let value = people.value(forKey: String(cString: name!))
             
-            print("\(i) ---- \(String(cString: typecod!))  \(String(describing: String(cString: name!))) \(offset) \(String(describing: value)))")
+            print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) \(i) ---- \(String(cString: typecod!))  \(String(describing: String(cString: name!))) \(offset) \(String(describing: value)))")
             
             resultDict.updateValue(value!, forKey: String(cString: name!))
         }
-        print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) \(resultDict)")
+        print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) \(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) \(resultDict)")
     }
     
     /******************** mode dict transfer end  ***********************/
@@ -243,14 +243,14 @@ class MyRunTimeViewController: MyBaseViewController {
         for i in 0..<count {
             let property = propertys![Int(i)]
             
-            print("\n\(String(cString:property_getName(property)))")
+            print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) \n\(String(cString:property_getName(property)))")
             
             var attrCount:UInt32 = 0
             let attrs = property_copyAttributeList(property, &attrCount);
             for j in 0..<attrCount {
                 let attr = attrs![Int(j)]
                 
-                print("\(String(cString: attr.name))  \(String(cString: attr.value))")
+                print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) \(String(cString: attr.name))  \(String(cString: attr.value))")
                 
 //                if (attr.name[0] == 'T') {
 //                    size_t len = strlen(attrs[i].value);
