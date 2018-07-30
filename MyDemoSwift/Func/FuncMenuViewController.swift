@@ -13,12 +13,13 @@ enum FunctionDemo: String {
     case runTime
     case BleCentral
     case BlePeripheral
+    case Secure
     case def
 }
 
 class FuncMenuViewController: MyBaseViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     
-    let funcItems:[FunctionDemo] = [.networkSession, .runTime, .BleCentral, .BlePeripheral]
+    let funcItems:[FunctionDemo] = [.networkSession, .runTime, .BleCentral, .BlePeripheral, .Secure]
     
 
     var layout:UICollectionViewFlowLayout? = UICollectionViewFlowLayout.init()
@@ -112,6 +113,11 @@ class FuncMenuViewController: MyBaseViewController, UICollectionViewDataSource, 
         case .BlePeripheral:
             let ctl = MyPeripheralViewController()
             ctl.navigationItem.title = FunctionDemo.BlePeripheral.rawValue
+            self.navigationController?.pushViewController(ctl, animated: true)
+            
+        case .Secure:
+            let ctl = MySecureViewController()
+            ctl.navigationItem.title = FunctionDemo.Secure.rawValue
             self.navigationController?.pushViewController(ctl, animated: true)
             
         default:
