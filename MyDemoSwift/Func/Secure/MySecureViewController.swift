@@ -13,6 +13,9 @@ enum SecureType: String {
     case SHA1
     case SHA224
     case SHA512
+    case AES
+    case _3DES
+    case RC4
     case def
 }
 
@@ -28,15 +31,7 @@ class MySecureViewController: MyBaseViewController {
         // Do any additional setup after loading the view.
         //MARK 需要桥接文件导入  #import <CommonCrypto/CommonDigest.h>
         initControls()
-        
-        encrypt(encryptData: "zhangxin")
-//        let str = secure(text: "zhangxin", type: CCAlgorithm(kCCAlgorithmAES), operation: CCOperation(kCCEncrypt), key: "des")
-//        print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) <\(String(describing: str))>")
-//        //        bt1P8RsH+OZO3O7kinEFPQ==
-//        let str1 = secure(text: str!, type: CCAlgorithm(kCCAlgorithmAES), operation: CCOperation(kCCDecrypt), key: "des")
-//
-//        print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) <\(String(describing: str1))>")
-        
+
     }
 
     override func didReceiveMemoryWarning() {
@@ -67,7 +62,7 @@ class MySecureViewController: MyBaseViewController {
                                     "encryptLabel" : encryptLabel,
                                     "decryptLabel" : decryptLabel,]
         
-        let titles:[SecureType] = [.MD5, .SHA1, .SHA224, .SHA512, .def, .def]
+        let titles:[SecureType] = [.MD5, .SHA1, .SHA224, .SHA512, .AES, ._3DES, .RC4, .def, .def]
         
         let itemInRow = 3
         let rowCount = (titles.count + itemInRow - 1) / 3
@@ -133,6 +128,15 @@ class MySecureViewController: MyBaseViewController {
         case.SHA512:
             encryptStr = sha512Secure(encryptStr: textField.text!)
             decryptStr = "can not decrypt"
+        case.AES:
+            encryptStr = secure(operation: CCOperation(kCCEncrypt), text: textField.text!, key: "key", alg: CCAlgorithm(kCCAlgorithmAES), keySize: kCCKeySizeAES256, blockSize: kCCBlockSizeAES128)!
+            decryptStr = secure(operation: CCOperation(kCCDecrypt), text: encryptStr, key: "key", alg: CCAlgorithm(kCCAlgorithmAES), keySize: kCCKeySizeAES256, blockSize: kCCBlockSizeAES128)!
+        case._3DES:
+            encryptStr = secure(operation: CCOperation(kCCEncrypt), text: textField.text!, key: "key", alg: CCAlgorithm(kCCAlgorithm3DES), keySize: kCCKeySize3DES, blockSize: kCCBlockSize3DES)!
+            decryptStr = secure(operation: CCOperation(kCCDecrypt), text: encryptStr, key: "key", alg: CCAlgorithm(kCCAlgorithm3DES), keySize: kCCKeySize3DES, blockSize: kCCBlockSize3DES)!
+        case.RC4:
+            encryptStr = secure(operation: CCOperation(kCCEncrypt), text: textField.text!, key: "key", alg: CCAlgorithm(kCCAlgorithmRC4), keySize: kCCKeySizeMaxRC4, blockSize: kCCBlockSizeRC2)!
+            decryptStr = secure(operation: CCOperation(kCCDecrypt), text: encryptStr, key: "key", alg: CCAlgorithm(kCCAlgorithmRC4), keySize: kCCKeySizeMaxRC4, blockSize: kCCBlockSizeRC2)!
         default:
             encryptStr = "default"
             decryptStr = "defalut"
@@ -205,129 +209,45 @@ class MySecureViewController: MyBaseViewController {
     }
     
     //MARK des aes 加解密
-    
-    func secure(text:String, type:CCAlgorithm, operation:CCOperation, key:String) -> String? {
+    func secure(operation:CCOperation, text:String, key:String, alg:CCAlgorithm, keySize:Int, blockSize:Int) -> String? {
         
-        var dataIn:UnsafeRawPointer
-        var dataInLength:Int = 0
+        var keyData: Data = key.data(using: String.Encoding.utf8, allowLossyConversion: false)!
+        let keyLength = size_t(keySize)
+        while keyData.count < keyLength {
+            keyData.append("a".data(using: String.Encoding.utf8)!)
+        }
+        let keyBytes = UnsafeMutableRawPointer(mutating: (keyData as NSData).bytes)
         
-        switch operation {
-        case UInt32(kCCEncrypt):
-            let encryptData:Data = text.data(using: String.Encoding.utf8)!
-            dataInLength = encryptData.count
-            dataIn = UnsafeRawPointer((encryptData as NSData).bytes)
-            
-        case UInt32(kCCDecrypt):
-            let decryptData:Data = Data.init(base64Encoded: text, options: Data.Base64DecodingOptions.ignoreUnknownCharacters)!//转成utf-8并decode
-            dataInLength = decryptData.count
-            dataIn = UnsafeRawPointer((decryptData as NSData).bytes)
-            
-        default:
+        let data:Data
+        if operation == kCCEncrypt {
+            data = text.data(using: String.Encoding.utf8)!
+        } else if operation == kCCDecrypt {
+            data = Data.init(base64Encoded: text, options: Data.Base64DecodingOptions.ignoreUnknownCharacters)!//转成utf-8并decode
+        } else {
             return ""
         }
-        
-        let keyData: Data = key.data(using: String.Encoding.utf8, allowLossyConversion: false)!
-        let keyBytes = UnsafeMutableRawPointer(mutating: (keyData as NSData).bytes)
-        let keyLength = size_t(kCCKeySizeAES256)
+        let dataInLength:Int = data.count
+        let dataIn:UnsafeRawPointer = UnsafeRawPointer((data as NSData).bytes)
 
-        let bufferData = NSMutableData(length: Int(dataInLength) + kCCBlockSizeAES128)!
+        let bufferData = NSMutableData(length: Int(dataInLength) + blockSize)!
         let dataOut = UnsafeMutableRawPointer(bufferData.mutableBytes)
         let dataOutAvailable = size_t(bufferData.length)
         var dataOutMoved:Int = 0
-//            UnsafeMutableRawPointer? = malloc( dataOutAvailable * MemoryLayout.size(ofValue: UInt8.self))
-//        memset(dataOut, 0x0, dataOutAvailable)//将已开辟内存空间buffer的首 1 个字节的值设为值 0
         
-        let initIv:String = "12345678"
-        
-        let status = CCCrypt(operation, type, CCOptions(kCCOptionPKCS7Padding + kCCOptionECBMode), keyBytes, keyLength, nil, dataIn, dataInLength, dataOut, dataOutAvailable, &dataOutMoved)
-//        CCCrypt(<#T##op: CCOperation##CCOperation#>, <#T##alg: CCAlgorithm##CCAlgorithm#>, <#T##options: CCOptions##CCOptions#>, <#T##key: UnsafeRawPointer!##UnsafeRawPointer!#>, <#T##keyLength: Int##Int#>, <#T##iv: UnsafeRawPointer!##UnsafeRawPointer!#>, <#T##dataIn: UnsafeRawPointer!##UnsafeRawPointer!#>, <#T##dataInLength: Int##Int#>, <#T##dataOut: UnsafeMutableRawPointer!##UnsafeMutableRawPointer!#>, <#T##dataOutAvailable: Int##Int#>, <#T##dataOutMoved: UnsafeMutablePointer<Int>!##UnsafeMutablePointer<Int>!#>)
-        print("\(status)")
+        let status = CCCrypt(operation, alg, CCOptions(kCCOptionPKCS7Padding + kCCOptionECBMode), keyBytes, keyLength, nil, dataIn, dataInLength, dataOut, dataOutAvailable, &dataOutMoved)
+
+        print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) <\(status)>")
 
         var str:String? = nil
         if operation == kCCEncrypt {
             let data = Data.init(bytes: dataOut, count: dataOutMoved)
             str = data.base64EncodedString(options: Data.Base64EncodingOptions.lineLength64Characters)
-        } else {
+        } else if operation == kCCDecrypt {
             let data = Data.init(bytes: dataOut, count: dataOutMoved)
             str = String.init(data: data, encoding: String.Encoding.utf8)
         }
-        
         return str!
     }
-    
-    
-    
-    func encrypt(encryptData:String){
-        let key = "des"
-        let inputData : Data = encryptData.data(using: String.Encoding.utf8)!
-        
-        let keyData: Data = key.data(using: String.Encoding.utf8, allowLossyConversion: false)!
-        let keyBytes = UnsafeMutableRawPointer(mutating: (keyData as NSData).bytes)
-        let keyLength = size_t(kCCKeySize3DES)
-        
-        let dataLength = Int(inputData.count)
-        let dataBytes = UnsafeRawPointer((inputData as NSData).bytes)
-        let bufferData = NSMutableData(length: Int(dataLength) + kCCBlockSize3DES)!
-        let bufferPointer = UnsafeMutableRawPointer(bufferData.mutableBytes)
-        let bufferLength = size_t(bufferData.length)
-        var bytesDecrypted = Int(0)
-        
-        let cryptStatus = CCCrypt(
-            UInt32(kCCEncrypt),
-            UInt32(kCCAlgorithm3DES),
-            UInt32(kCCOptionECBMode + kCCOptionPKCS7Padding),
-            keyBytes,
-            keyLength,
-            nil,
-            dataBytes,
-            dataLength,
-            bufferPointer,
-            bufferLength,
-            &bytesDecrypted)
-        
-        if Int32(cryptStatus) == Int32(kCCSuccess) {
-            bufferData.length = bytesDecrypted
-            decrypt(inputData: bufferData as Data)
-        } else {
-            print("加密过程出错: \(cryptStatus)")
-        }
-    }
-    
-    func decrypt(inputData : Data){
-        let keyData: Data = "des".data(using: String.Encoding.utf8, allowLossyConversion: false)!
-        let keyBytes = UnsafeMutableRawPointer(mutating: (keyData as NSData).bytes)
-        let keyLength = size_t(kCCKeySize3DES)
-        let dataLength = Int(inputData.count)
-        let dataBytes = UnsafeRawPointer((inputData as NSData).bytes)
-        let bufferData = NSMutableData(length: Int(dataLength) + kCCBlockSize3DES)!
-        let bufferPointer = UnsafeMutableRawPointer(bufferData.mutableBytes)
-        let bufferLength = size_t(bufferData.length)
-        var bytesDecrypted = Int(0)
-        
-        let cryptStatus = CCCrypt(
-            UInt32(kCCDecrypt),
-            UInt32(kCCAlgorithm3DES),
-            UInt32(kCCOptionECBMode + kCCOptionPKCS7Padding),
-            keyBytes,
-            keyLength,
-            nil,
-            dataBytes,
-            dataLength,
-            bufferPointer,
-            bufferLength,
-            &bytesDecrypted)
-        
-        if Int32(cryptStatus) == Int32(kCCSuccess) {
-            bufferData.length = bytesDecrypted
-            let clearDataAsString = NSString(data: bufferData as Data, encoding: String.Encoding.utf8.rawValue)
-            print("解密后的内容：\(clearDataAsString! as String)")
-        } else {
-            print("解密过程出错: \(cryptStatus)")
-        }
-    }
-    
-    
-    
     
     
     
