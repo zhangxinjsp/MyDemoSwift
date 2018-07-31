@@ -139,6 +139,7 @@
 		5B339D451E851CD700B1DF75 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5B339D4A1E851CD700B1DF75 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5B339D521E851FB400B1DF75 /* MyBaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyBaseViewController.swift; sourceTree = "<group>"; };
+		5B4E9518210EA10C00E072D2 /* MyDemoSwift-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MyDemoSwift-Bridging-Header.h"; sourceTree = "<group>"; };
 		5B6444712108154300483E4D /* MyCentralViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCentralViewController.swift; sourceTree = "<group>"; };
 		5B6444732108156600483E4D /* MyPeripheralViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPeripheralViewController.swift; sourceTree = "<group>"; };
 		5B6444752108165A00483E4D /* PeripheralManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeripheralManager.swift; sourceTree = "<group>"; };
@@ -311,6 +312,7 @@
 				5B339D4A1E851CD700B1DF75 /* Info.plist */,
 				5BF5FE3420FC3C20005D1ACA /* InfoPlist.strings */,
 				5BF5FE3B20FC3D4E005D1ACA /* Localizable.strings */,
+				5B4E9518210EA10C00E072D2 /* MyDemoSwift-Bridging-Header.h */,
 			);
 			path = MyDemoSwift;
 			sourceTree = "<group>";
@@ -857,6 +859,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = 6773LQR8YW;
 				INFOPLIST_FILE = MyDemoSwift/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -865,6 +868,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "5670d66e-21a3-4834-827b-81125854747e";
 				PROVISIONING_PROFILE_SPECIFIER = Cloudrive3_BOSCH;
+				SWIFT_OBJC_BRIDGING_HEADER = "MyDemoSwift/MyDemoSwift-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
 				SWIFT_VERSION = 4.0;
 			};
@@ -875,6 +880,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = 6773LQR8YW;
 				INFOPLIST_FILE = MyDemoSwift/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -883,6 +889,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "5670d66e-21a3-4834-827b-81125854747e";
 				PROVISIONING_PROFILE_SPECIFIER = Cloudrive3_BOSCH;
+				SWIFT_OBJC_BRIDGING_HEADER = "MyDemoSwift/MyDemoSwift-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
 				SWIFT_VERSION = 4.0;
 			};
