@@ -32,6 +32,7 @@ class MySecureViewController: MyBaseViewController {
         //MARK 需要桥接文件导入  #import <CommonCrypto/CommonDigest.h>
         initControls()
 
+        publicKey()
     }
 
     override func didReceiveMemoryWarning() {
@@ -249,10 +250,83 @@ class MySecureViewController: MyBaseViewController {
         return str!
     }
     
+    /*
+     RSA 加解密使用
+     
+     证书生成
+     
+     openssl genrsa -out private_key.pem 1024
+     Generating RSA private key, 1024 bit long modulus
+     ...........++++++
+     ...........................................++++++
+     e is 65537 (0x10001)
+     zhangxin-2:Desktop archermind$ openssl req -new -key private_key.pem -out rsaCertReq.csr
+     You are about to be asked to enter information that will be incorporated
+     into your certificate request.
+     What you are about to enter is what is called a Distinguished Name or a DN.
+     There are quite a few fields but you can leave some blank
+     For some fields there will be a default value,
+     If you enter '.', the field will be left blank.
+     -----
+     Country Name (2 letter code) [AU]:cn
+     State or Province Name (full name) [Some-State]:jiangsu
+     Locality Name (eg, city) []:nanjing
+     Organization Name (eg, company) [Internet Widgits Pty Ltd]:test
+     Organizational Unit Name (eg, section) []:tes
+     Common Name (e.g. server FQDN or YOUR name) []:test
+     Email Address []:test@test.com
+     
+     Please enter the following 'extra' attributes
+     to be sent with your certificate request
+     A challenge password []:
+     An optional company name []:
+     zhangxin-2:Desktop archermind$ openssl x509 -req -days 3650 -in rsaCertReq.csr -signkey private_key.pem -out rsaCert.crt
+     Signature ok
+     subject=/C=cn/ST=jiangsu/L=nanjing/O=test/OU=tes/CN=test/emailAddress=test@test.com
+     Getting Private key
+     zhangxin-2:Desktop archermind$ openssl x509 -outform der -in rsaCert.crt -out public_key.der
+     zhangxin-2:Desktop archermind$ openssl pkcs12 -export -out private_key.p12 -inkey private_key.pem -in rsaCert.crt
+     Enter Export Password:
+     Verifying - Enter Export Password:
+     zhangxin-2:Desktop archermind$
+     zhangxin-2:Desktop archermind$ openssl rsa -in private_key.pem -out rsa_public_key.pem -pubout
+     writing RSA key
+     zhangxin-2:Desktop archermind$ openssl pkcs8 -topk8 -in private_key.pem -out pkcs8_private_key.pem -nocrypt
+     zhangxin-2:Desktop archermind$
+     
+     */
+    func publicKey() -> SecKey {
+        
+        var publickey:SecKey? = nil
+        var status:OSStatus = 0
+        if publickey == nil {
+            let keyPath:String? = Bundle.main.path(forResource: "public_key", ofType: "der")
+            
+            var keyData:CFData? = nil
+            
+            do {
+                let fileData:Data? = try Data.init(contentsOf: URL.init(fileURLWithPath: keyPath!))
+                
+                keyData = fileData! as CFData
+            } catch {
+            }
+            
+            let cert:SecCertificate? = SecCertificateCreateWithData(kCFAllocatorDefault, keyData!)
+            
+//            if #available(iOS 10.3, *) {
+//                publickey = SecCertificateCopyPublicKey(cert!)
+//            } else {
+                let policy:SecPolicy = SecPolicyCreateBasicX509();
+                var trust:SecTrust? = nil
+                
+                status = SecTrustCreateWithCertificates(cert!, policy, &trust);
+                publickey = SecTrustCopyPublicKey(trust!)
+//            }
+        }
+        return publickey!   
+    }
     
-    
-    
-    
+
     
     
     
