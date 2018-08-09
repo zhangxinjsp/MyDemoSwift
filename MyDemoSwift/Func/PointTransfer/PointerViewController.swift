@@ -60,6 +60,13 @@ class PointerViewController: MyBaseViewController {
         print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) \(a)")//10
     }
     
+    func qqqqqq() {
+        
+//        UnsafePointer<UInt8>    ==  [UInt8]("string".utf8)
+//        UnsafeMutablePointer<UInt8>  ==  [UInt8](repeating: 0, count: Int(blockSize))
+        
+    }
+    
     func withUnsafePoint () {
         
     

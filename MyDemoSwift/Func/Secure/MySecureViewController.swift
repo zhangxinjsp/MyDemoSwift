@@ -16,6 +16,7 @@ enum SecureType: String {
     case AES
     case _3DES
     case RC4
+    case RSA
     case def
 }
 
@@ -31,9 +32,6 @@ class MySecureViewController: MyBaseViewController {
         // Do any additional setup after loading the view.
         //MARK 需要桥接文件导入  #import <CommonCrypto/CommonDigest.h>
         initControls()
-
-        publicKey()
-        privateKey()
     }
 
     override func didReceiveMemoryWarning() {
@@ -64,7 +62,7 @@ class MySecureViewController: MyBaseViewController {
                                     "encryptLabel" : encryptLabel,
                                     "decryptLabel" : decryptLabel,]
         
-        let titles:[SecureType] = [.MD5, .SHA1, .SHA224, .SHA512, .AES, ._3DES, .RC4, .def, .def]
+        let titles:[SecureType] = [.MD5, .SHA1, .SHA224, .SHA512, .AES, ._3DES, .RC4, .RSA, .def]
         
         let itemInRow = 3
         let rowCount = (titles.count + itemInRow - 1) / 3
@@ -139,6 +137,12 @@ class MySecureViewController: MyBaseViewController {
         case.RC4:
             encryptStr = secure(operation: CCOperation(kCCEncrypt), text: textField.text!, key: "key", alg: CCAlgorithm(kCCAlgorithmRC4), keySize: kCCKeySizeMaxRC4, blockSize: kCCBlockSizeRC2)!
             decryptStr = secure(operation: CCOperation(kCCDecrypt), text: encryptStr, key: "key", alg: CCAlgorithm(kCCAlgorithmRC4), keySize: kCCKeySizeMaxRC4, blockSize: kCCBlockSizeRC2)!
+        case.RSA:
+            
+            encryptStr = publicKeyEncrypt(plainText: textField.text!)!
+            decryptStr = privateKeyDecrypt(cipherText: encryptStr)!
+            
+            
         default:
             encryptStr = "default"
             decryptStr = "defalut"
@@ -342,7 +346,7 @@ class MySecureViewController: MyBaseViewController {
         
         var items:CFArray? = CFArrayCreate(kCFAllocatorDefault, nil, 0, nil);
         var status = SecPKCS12Import(p12Data! as CFData, options, &items);
-        print("\(status)")
+        print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) <\(status)>")
         if status != errSecSuccess {
             return nil
         }
@@ -358,16 +362,78 @@ class MySecureViewController: MyBaseViewController {
         return privateKey!
     }
 
-    func publicKeyEncrypt(str:String) -> Data {
+    func publicKeyEncrypt(plainText:String) -> String? {
         
-        SecKeyEncrypt(<#T##key: SecKey##SecKey#>, <#T##padding: SecPadding##SecPadding#>, <#T##plainText: UnsafePointer<UInt8>##UnsafePointer<UInt8>#>, <#T##plainTextLen: Int##Int#>, <#T##cipherText: UnsafeMutablePointer<UInt8>##UnsafeMutablePointer<UInt8>#>, <#T##cipherTextLen: UnsafeMutablePointer<Int>##UnsafeMutablePointer<Int>#>)
-        SecKeyCreateEncryptedData(<#T##key: SecKey##SecKey#>, <#T##algorithm: SecKeyAlgorithm##SecKeyAlgorithm#>, <#T##plaintext: CFData##CFData#>, <#T##error: UnsafeMutablePointer<Unmanaged<CFError>?>?##UnsafeMutablePointer<Unmanaged<CFError>?>?#>)
+        let publicKey = self.publicKey()
+        let blockSize = SecKeyGetBlockSize(publicKey!);
+        
+        let plainTextData = [UInt8](plainText.utf8)
+        let plainTextDataLength = plainText.count
+        
+        var resultData:Data? = nil
+
+        if #available(iOS 10.0, *) {
+            let plainTextCFData = CFDataCreate(kCFAllocatorDefault, plainTextData, plainTextDataLength)
+            var error : Unmanaged<CFError>? = nil
+            let resultcf = SecKeyCreateEncryptedData(publicKey!, SecKeyAlgorithm.rsaEncryptionPKCS1, plainTextCFData!, &error)
+
+            let length:Int = CFDataGetLength(resultcf)
+            var cipher = [UInt8](repeating: 0, count: length)
+            CFDataGetBytes(resultcf, CFRangeMake(0, length), &cipher)
+            resultData = Data.init(bytes: cipher, count: length)
+
+        } else {
+        
+            var cipherText = [UInt8](repeating: 0, count: Int(blockSize))
+            var cipherTextLength = blockSize
+            
+            let status = SecKeyEncrypt(publicKey!,
+                                       SecPadding.PKCS1,
+                                       plainTextData, Int(plainTextDataLength),
+                                       &cipherText, &cipherTextLength)
+            print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) <\(status)>")
+            
+            resultData = Data.init(bytes: cipherText, count: cipherTextLength)
+        }
+    
+        return resultData!.base64EncodedString()
     }
 //
-//    func privateKeyDecrypt(str:String) -> Data {
-//        SecKeyDecrypt(<#T##key: SecKey##SecKey#>, <#T##padding: SecPadding##SecPadding#>, <#T##cipherText: UnsafePointer<UInt8>##UnsafePointer<UInt8>#>, <#T##cipherTextLen: Int##Int#>, <#T##plainText: UnsafeMutablePointer<UInt8>##UnsafeMutablePointer<UInt8>#>, <#T##plainTextLen: UnsafeMutablePointer<Int>##UnsafeMutablePointer<Int>#>)
-//        SecKeyCreateDecryptedData(<#T##key: SecKey##SecKey#>, <#T##algorithm: SecKeyAlgorithm##SecKeyAlgorithm#>, <#T##ciphertext: CFData##CFData#>, <#T##error: UnsafeMutablePointer<Unmanaged<CFError>?>?##UnsafeMutablePointer<Unmanaged<CFError>?>?#>)
-//    }
+    func privateKeyDecrypt(cipherText:String) -> String? {
+        
+        let privateKey = self.privateKey()
+        let blockSize = SecKeyGetBlockSize(privateKey!)
+        
+        
+        let cipherData = [UInt8](Data.init(base64Encoded: cipherText)!)
+        let cipherDataLength = cipherData.count
+        
+        var resultData:Data? = nil
+        
+        if #available(iOS 10.0, *) {
+            
+            let cipherTextCFData = CFDataCreate(kCFAllocatorDefault, cipherData, cipherDataLength)
+            var error : Unmanaged<CFError>? = nil
+            let resultcf = SecKeyCreateDecryptedData(privateKey!, SecKeyAlgorithm.rsaEncryptionPKCS1, cipherTextCFData!, &error)
+            
+            let length:Int = CFDataGetLength(resultcf)
+            var plain = [UInt8](repeating: 0, count: length)
+            CFDataGetBytes(resultcf, CFRangeMake(0, length), &plain)
+            resultData = Data.init(bytes: plain, count: length)
+            
+        } else {
+            var plainText = [UInt8](repeating: 0, count: Int(blockSize))
+            var plainTextLength = blockSize
+            
+            SecKeyDecrypt(privateKey!,
+                          SecPadding.PKCS1,
+                          cipherData, cipherDataLength,
+                          &plainText, &plainTextLength)
+            resultData = Data.init(bytes: plainText, count: plainTextLength)
+        }
+        
+        return String.init(data: resultData!, encoding: String.Encoding.utf8)
+    }
     
     
     
