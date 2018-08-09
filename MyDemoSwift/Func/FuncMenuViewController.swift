@@ -14,12 +14,15 @@ enum FunctionDemo: String {
     case BleCentral
     case BlePeripheral
     case Secure
+    case Pointer
+    case SocketService
+    case SocketClient
     case def
 }
 
 class FuncMenuViewController: MyBaseViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     
-    let funcItems:[FunctionDemo] = [.networkSession, .runTime, .BleCentral, .BlePeripheral, .Secure]
+    let funcItems:[FunctionDemo] = [.networkSession, .runTime, .BleCentral, .BlePeripheral, .Secure, .Pointer, .SocketService, .SocketClient, .def]
     
 
     var layout:UICollectionViewFlowLayout? = UICollectionViewFlowLayout.init()
@@ -118,6 +121,21 @@ class FuncMenuViewController: MyBaseViewController, UICollectionViewDataSource, 
         case .Secure:
             let ctl = MySecureViewController()
             ctl.navigationItem.title = FunctionDemo.Secure.rawValue
+            self.navigationController?.pushViewController(ctl, animated: true)
+            
+        case .Pointer:
+            let ctl = PointerViewController()
+            ctl.navigationItem.title = FunctionDemo.Pointer.rawValue
+            self.navigationController?.pushViewController(ctl, animated: true)
+            
+        case .SocketService:
+            let ctl = MySocketServiceViewController()
+            ctl.navigationItem.title = FunctionDemo.SocketService.rawValue
+            self.navigationController?.pushViewController(ctl, animated: true)
+            
+        case .SocketClient:
+            let ctl = MySocketClientViewController()
+            ctl.navigationItem.title = FunctionDemo.SocketClient.rawValue
             self.navigationController?.pushViewController(ctl, animated: true)
             
         default:

@@ -71,7 +71,8 @@ class MySessionViewController: MyBaseViewController {
     }
     
     @objc func downloadImage(sender:UIButton?) {
-        MySessionManager.shared.downloadWithUrl(downloadUrl: "https://sh.syan.com.cn:7756/cherym31t/m31t/download/?id=My5qcGc=") { (fileName, error) in
+        MySessionManager.shared.downloadWithUrl(downloadUrl: "https://sh.syan.com.cn:7756/cherym31t/m31t/download/?id=My5qcGc=") { (downloadUrl, fileName, error) in
+            print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) \(String(describing: downloadUrl))")
             print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) \(String(describing: fileName))")
             print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) \(String(describing: error))")
             self.imageView.image = UIImage.init(contentsOfFile: fileName as! String)
@@ -90,7 +91,13 @@ class MySessionViewController: MyBaseViewController {
         
         do {
             let data = try JSONSerialization.data(withJSONObject: dict, options: JSONSerialization.WritingOptions.prettyPrinted)
-            MySessionManager.shared.sendRequestWith(mode: data) { (resp, error) in
+            print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) \(String(describing: data))")
+            MySessionManager.shared.sendRequestWith(mode: data) { (req, resp, error) in
+                do {
+                    let aaa = try JSONSerialization.jsonObject(with: req as! Data, options: JSONSerialization.ReadingOptions.mutableLeaves)
+                    print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) \(String(describing: aaa))")
+                } catch {
+                }
                 
                 self.textView.text = String(describing: resp)
                 

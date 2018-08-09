@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5B0061352119DB7E00AB1ECF /* MySocketServiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B0061342119DB7E00AB1ECF /* MySocketServiceViewController.swift */; };
+		5B0061372119DB9F00AB1ECF /* MySocketClientViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B0061362119DB9F00AB1ECF /* MySocketClientViewController.swift */; };
+		5B00613C211BC91700AB1ECF /* rsa2048rootca.der in Resources */ = {isa = PBXBuildFile; fileRef = 5B00613A211BC91700AB1ECF /* rsa2048rootca.der */; };
+		5B00613D211BC91700AB1ECF /* PKIRootCA.der in Resources */ = {isa = PBXBuildFile; fileRef = 5B00613B211BC91700AB1ECF /* PKIRootCA.der */; };
 		5B339D3F1E851CD700B1DF75 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B339D3E1E851CD700B1DF75 /* AppDelegate.swift */; };
 		5B339D461E851CD700B1DF75 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5B339D451E851CD700B1DF75 /* Assets.xcassets */; };
 		5B339D531E851FB400B1DF75 /* MyBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B339D521E851FB400B1DF75 /* MyBaseViewController.swift */; };
@@ -19,6 +23,7 @@
 		5B64447B210B04E000483E4D /* MySecureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B64447A210B04E000483E4D /* MySecureViewController.swift */; };
 		5B9E26C11E85217400C855A3 /* MyNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B9E26C01E85217400C855A3 /* MyNavigationController.swift */; };
 		5B9E26C31E8521EC00C855A3 /* MyTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B9E26C21E8521EC00C855A3 /* MyTabBarController.swift */; };
+		5BB5B55A21145D3D00D151F7 /* PointerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB5B55921145D3D00D151F7 /* PointerViewController.swift */; };
 		5BE4C00721008D5C0067315C /* MyRunTimeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BE4C00621008D5C0067315C /* MyRunTimeViewController.swift */; };
 		5BE4C00921008ECC0067315C /* MyRunTimeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BE4C00821008ECC0067315C /* MyRunTimeModel.swift */; };
 		5BF5FDB720FC2DF4005D1ACA /* bottomBarImage@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BF5FD5220FC2DED005D1ACA /* bottomBarImage@2x.png */; };
@@ -131,11 +136,13 @@
 		5BF5FE5A20FDDD1F005D1ACA /* NaviTransitionAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BF5FE5920FDDD1F005D1ACA /* NaviTransitionAnimation.swift */; };
 		5BF5FE5D20FDEE42005D1ACA /* MySessionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BF5FE5C20FDEE42005D1ACA /* MySessionViewController.swift */; };
 		5BF5FE5F20FDEE99005D1ACA /* MySessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BF5FE5E20FDEE99005D1ACA /* MySessionManager.swift */; };
-		5BF5FE6520FF6CF5005D1ACA /* rsa2048rootca.der in Resources */ = {isa = PBXBuildFile; fileRef = 5BF5FE6320FF6CF4005D1ACA /* rsa2048rootca.der */; };
-		5BF5FE6620FF6CF5005D1ACA /* PKIRootCA.der in Resources */ = {isa = PBXBuildFile; fileRef = 5BF5FE6420FF6CF5005D1ACA /* PKIRootCA.der */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5B0061342119DB7E00AB1ECF /* MySocketServiceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MySocketServiceViewController.swift; sourceTree = "<group>"; };
+		5B0061362119DB9F00AB1ECF /* MySocketClientViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MySocketClientViewController.swift; sourceTree = "<group>"; };
+		5B00613A211BC91700AB1ECF /* rsa2048rootca.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = rsa2048rootca.der; sourceTree = "<group>"; };
+		5B00613B211BC91700AB1ECF /* PKIRootCA.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = PKIRootCA.der; sourceTree = "<group>"; };
 		5B339D3B1E851CD700B1DF75 /* MyDemoSwift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyDemoSwift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B339D3E1E851CD700B1DF75 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5B339D451E851CD700B1DF75 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -151,6 +158,7 @@
 		5B64447A210B04E000483E4D /* MySecureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MySecureViewController.swift; sourceTree = "<group>"; };
 		5B9E26C01E85217400C855A3 /* MyNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyNavigationController.swift; sourceTree = "<group>"; };
 		5B9E26C21E8521EC00C855A3 /* MyTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTabBarController.swift; sourceTree = "<group>"; };
+		5BB5B55921145D3D00D151F7 /* PointerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointerViewController.swift; sourceTree = "<group>"; };
 		5BE4C00621008D5C0067315C /* MyRunTimeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyRunTimeViewController.swift; sourceTree = "<group>"; };
 		5BE4C00821008ECC0067315C /* MyRunTimeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyRunTimeModel.swift; sourceTree = "<group>"; };
 		5BF5FD5220FC2DED005D1ACA /* bottomBarImage@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bottomBarImage@2x.png"; sourceTree = "<group>"; };
@@ -267,8 +275,6 @@
 		5BF5FE5920FDDD1F005D1ACA /* NaviTransitionAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaviTransitionAnimation.swift; sourceTree = "<group>"; };
 		5BF5FE5C20FDEE42005D1ACA /* MySessionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MySessionViewController.swift; sourceTree = "<group>"; };
 		5BF5FE5E20FDEE99005D1ACA /* MySessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MySessionManager.swift; sourceTree = "<group>"; };
-		5BF5FE6320FF6CF4005D1ACA /* rsa2048rootca.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = rsa2048rootca.der; sourceTree = "<group>"; };
-		5BF5FE6420FF6CF5005D1ACA /* PKIRootCA.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = PKIRootCA.der; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -282,6 +288,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5B0061332119DA9400AB1ECF /* Socket */ = {
+			isa = PBXGroup;
+			children = (
+				5B0061342119DB7E00AB1ECF /* MySocketServiceViewController.swift */,
+				5B0061362119DB9F00AB1ECF /* MySocketClientViewController.swift */,
+			);
+			path = Socket;
+			sourceTree = "<group>";
+		};
 		5B339D321E851CD600B1DF75 = {
 			isa = PBXGroup;
 			children = (
@@ -343,8 +358,8 @@
 		5B9E278D1E88F32400C855A3 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
-				5BF5FE6420FF6CF5005D1ACA /* PKIRootCA.der */,
-				5BF5FE6320FF6CF4005D1ACA /* rsa2048rootca.der */,
+				5B00613B211BC91700AB1ECF /* PKIRootCA.der */,
+				5B00613A211BC91700AB1ECF /* rsa2048rootca.der */,
 				5B4E951D21115BBB00E072D2 /* private_key.p12 */,
 				5B4E951C21115BBB00E072D2 /* public_key.der */,
 				5BF5FD9020FC2DF3005D1ACA /* aboutUs@2x.png */,
@@ -417,6 +432,14 @@
 				5BF5FDB420FC2DF4005D1ACA /* weiboIconWhite@2x.png */,
 			);
 			path = Resource;
+			sourceTree = "<group>";
+		};
+		5BB5B55821145D0B00D151F7 /* PointTransfer */ = {
+			isa = PBXGroup;
+			children = (
+				5BB5B55921145D3D00D151F7 /* PointerViewController.swift */,
+			);
+			path = PointTransfer;
 			sourceTree = "<group>";
 		};
 		5BE4C00521008D090067315C /* RunTime */ = {
@@ -504,6 +527,8 @@
 			isa = PBXGroup;
 			children = (
 				5BF5FE5520FD7974005D1ACA /* FuncMenuViewController.swift */,
+				5B0061332119DA9400AB1ECF /* Socket */,
+				5BB5B55821145D0B00D151F7 /* PointTransfer */,
 				5B644479210B04AA00483E4D /* Secure */,
 				5B644470210814F800483E4D /* BLE */,
 				5BE4C00521008D090067315C /* RunTime */,
@@ -590,7 +615,6 @@
 			files = (
 				5BF5FDED20FC2DF4005D1ACA /* myMessage@2x.png in Resources */,
 				5BF5FDD720FC2DF4005D1ACA /* weiboIconColor@2x.png in Resources */,
-				5BF5FE6520FF6CF5005D1ACA /* rsa2048rootca.der in Resources */,
 				5BF5FDB920FC2DF4005D1ACA /* activeIconSelected@2x.png in Resources */,
 				5BF5FDEF20FC2DF4005D1ACA /* img_placeholder.png in Resources */,
 				5BF5FE0120FC2DF5005D1ACA /* IMG_0431@2x.jpg in Resources */,
@@ -622,6 +646,7 @@
 				5BF5FDDF20FC2DF4005D1ACA /* unpraise_gray@2x.png in Resources */,
 				5BF5FDFA20FC2DF5005D1ACA /* IMG_0426@2x.jpg in Resources */,
 				5BF5FDDE20FC2DF4005D1ACA /* defaultAvatar@2x.png in Resources */,
+				5B00613C211BC91700AB1ECF /* rsa2048rootca.der in Resources */,
 				5BF5FDC320FC2DF4005D1ACA /* accountBind@2x.png in Resources */,
 				5BF5FDFE20FC2DF5005D1ACA /* IMG_0427@2x.jpg in Resources */,
 				5BF5FE1820FC2DF5005D1ACA /* logo@2x.png in Resources */,
@@ -630,7 +655,6 @@
 				5BF5FDE820FC2DF4005D1ACA /* favoriteCircleSelected@2x.png in Resources */,
 				5BF5FE0820FC2DF5005D1ACA /* mask@2x.png in Resources */,
 				5BF5FDF920FC2DF5005D1ACA /* search@2x.jpg in Resources */,
-				5BF5FE6620FF6CF5005D1ACA /* PKIRootCA.der in Resources */,
 				5BF5FDC420FC2DF4005D1ACA /* vipSelectIcon@2x.png in Resources */,
 				5BF5FDCA20FC2DF4005D1ACA /* weChatIconColor@2x.png in Resources */,
 				5BF5FDE520FC2DF4005D1ACA /* infoIconSelected@2x.png in Resources */,
@@ -657,6 +681,7 @@
 				5BF5FDF120FC2DF4005D1ACA /* recommendFriend@2x.png in Resources */,
 				5BF5FDE620FC2DF4005D1ACA /* orderEmptyErrorIcon@2x.png in Resources */,
 				5BF5FDC820FC2DF4005D1ACA /* praise_gray@2x.png in Resources */,
+				5B00613D211BC91700AB1ECF /* PKIRootCA.der in Resources */,
 				5BF5FDD520FC2DF4005D1ACA /* commentDialogue@2x.png in Resources */,
 				5BF5FDBF20FC2DF4005D1ACA /* favoriteCircleUnselected@2x.png in Resources */,
 				5BF5FDD420FC2DF4005D1ACA /* loginBG@2x.png in Resources */,
@@ -704,6 +729,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5BB5B55A21145D3D00D151F7 /* PointerViewController.swift in Sources */,
 				5BE4C00921008ECC0067315C /* MyRunTimeModel.swift in Sources */,
 				5BF5FE5A20FDDD1F005D1ACA /* NaviTransitionAnimation.swift in Sources */,
 				5BF5FE5D20FDEE42005D1ACA /* MySessionViewController.swift in Sources */,
@@ -717,7 +743,9 @@
 				5B9E26C11E85217400C855A3 /* MyNavigationController.swift in Sources */,
 				5BF5FE4F20FC40BF005D1ACA /* ThirdMenuViewController.swift in Sources */,
 				5BF5FE5820FD84E8005D1ACA /* TabbarTransitionAnimation.swift in Sources */,
+				5B0061372119DB9F00AB1ECF /* MySocketClientViewController.swift in Sources */,
 				5B339D3F1E851CD700B1DF75 /* AppDelegate.swift in Sources */,
+				5B0061352119DB7E00AB1ECF /* MySocketServiceViewController.swift in Sources */,
 				5B6444742108156600483E4D /* MyPeripheralViewController.swift in Sources */,
 				5BF5FE5120FC40FA005D1ACA /* MyToolsMenuViewController.swift in Sources */,
 				5B6444782108166B00483E4D /* CentralManager.swift in Sources */,

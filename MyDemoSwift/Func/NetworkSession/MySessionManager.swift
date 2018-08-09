@@ -20,8 +20,9 @@ class MySessionManager: NSObject, URLSessionDelegate, URLSessionTaskDelegate, UR
     
     static let shared:MySessionManager = MySessionManager.init()
     
-    var callbackDict:[Int : (Any?, Error?)->Swift.Void] = [:]
+    var callbackDict:[Int : (Any?, Any?, Error?)->Swift.Void] = [:]
     var receiveDict:[Int : Any] = [:]
+    var requestDict:[Int : Any] = [:]
     
     var session:URLSession = URLSession.shared
     
@@ -53,21 +54,22 @@ class MySessionManager: NSObject, URLSessionDelegate, URLSessionTaskDelegate, UR
         return req
     }
     
-    public func sendRequestWith(mode:Any, callback: @escaping (Any?, Error?)->Swift.Void) {
+    public func sendRequestWith(mode:Any, callback: @escaping (Any?, Any?, Error?)->Swift.Void) {
         
         let req = self.createRequestWith(data: mode as! Data)
         
         let task:URLSessionDataTask = session.dataTask(with: req as URLRequest)
         
         callbackDict.updateValue(callback, forKey: task.taskIdentifier)
-        
+        requestDict.updateValue(mode, forKey: task.taskIdentifier)
         task.resume()
     }
     
-    public func downloadWithUrl(downloadUrl:String, callback: @escaping (Any?, Error?)->Swift.Void) {
+    public func downloadWithUrl(downloadUrl:String, callback: @escaping (Any?, Any?, Error?)->Swift.Void) {
         
         let task:URLSessionDownloadTask = session.downloadTask(with: URL.init(string: downloadUrl)!)
         callbackDict.updateValue(callback, forKey: task.taskIdentifier)
+        requestDict.updateValue(downloadUrl, forKey: task.taskIdentifier)
         task.resume()
     }
     
@@ -159,8 +161,8 @@ class MySessionManager: NSObject, URLSessionDelegate, URLSessionTaskDelegate, UR
             print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) URLSessionDataTask id : \(task.taskIdentifier)")
         }
         DispatchQueue.main.async {
-            let callback:(Any?, Error?)->Swift.Void = self.callbackDict[task.taskIdentifier]!
-            callback(self.receiveDict[task.taskIdentifier], error)
+            let callback:(Any?, Any?, Error?)->Swift.Void = self.callbackDict[task.taskIdentifier]!
+            callback(self.requestDict[task.taskIdentifier], self.receiveDict[task.taskIdentifier], error)
         }
     }
     

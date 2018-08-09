@@ -33,6 +33,7 @@ class MySecureViewController: MyBaseViewController {
         initControls()
 
         publicKey()
+        privateKey()
     }
 
     override func didReceiveMemoryWarning() {
@@ -295,41 +296,78 @@ class MySecureViewController: MyBaseViewController {
      zhangxin-2:Desktop archermind$
      
      */
-    func publicKey() -> SecKey {
+    func publicKey() -> SecKey? {
         
         var publickey:SecKey? = nil
-        var status:OSStatus = 0
+        
         if publickey == nil {
             let keyPath:String? = Bundle.main.path(forResource: "public_key", ofType: "der")
             
             var keyData:CFData? = nil
-            
             do {
                 let fileData:Data? = try Data.init(contentsOf: URL.init(fileURLWithPath: keyPath!))
-                
                 keyData = fileData! as CFData
-            } catch {
-            }
+            } catch { }
             
             let cert:SecCertificate? = SecCertificateCreateWithData(kCFAllocatorDefault, keyData!)
             
-//            if #available(iOS 10.3, *) {
-//                publickey = SecCertificateCopyPublicKey(cert!)
-//            } else {
+            if #available(iOS 10.3, *) {
+                publickey = SecCertificateCopyPublicKey(cert!)
+            } else {
                 let policy:SecPolicy = SecPolicyCreateBasicX509();
                 var trust:SecTrust? = nil
                 
-                status = SecTrustCreateWithCertificates(cert!, policy, &trust);
+                let status:OSStatus = SecTrustCreateWithCertificates(cert!, policy, &trust);
+                if status != errSecSuccess {
+                    return nil
+                }
                 publickey = SecTrustCopyPublicKey(trust!)
-//            }
+            }
         }
         return publickey!   
     }
-    
+    func privateKey() -> SecKey? {
+        var privateKey:SecKey? = nil
+        var p12Data:Data? = nil
+        do {
+            let pkcsPath:String = Bundle.main.path(forResource: "private_key", ofType: "p12")!
+            p12Data = try Data.init(contentsOf: URL.init(fileURLWithPath: pkcsPath))
+        } catch {}
+        
+        let key = Unmanaged.passRetained(kSecImportExportPassphrase as NSString).autorelease().toOpaque()
+        let value = Unmanaged.passRetained("123456" as NSString).autorelease().toOpaque()
+        
+        let options:CFDictionary = CFDictionaryCreateMutable(kCFAllocatorDefault, 1, nil, nil)
+        CFDictionarySetValue(options as! CFMutableDictionary, key, value)
+        
+        var items:CFArray? = CFArrayCreate(kCFAllocatorDefault, nil, 0, nil);
+        var status = SecPKCS12Import(p12Data! as CFData, options, &items);
+        print("\(status)")
+        if status != errSecSuccess {
+            return nil
+        }
+        
+        let dict = unsafeBitCast(CFArrayGetValueAtIndex(items, 0), to: CFDictionary.self)
+        let identityKey = Unmanaged.passRetained(kSecImportItemIdentity as NSString).autorelease().toOpaque()
+        let identity = unsafeBitCast(CFDictionaryGetValue(dict, identityKey), to: SecIdentity.self)
+        
+        status = SecIdentityCopyPrivateKey(identity, &privateKey)
+        if status != errSecSuccess {
+            return nil
+        }
+        return privateKey!
+    }
 
-    
-    
-    
+    func publicKeyEncrypt(str:String) -> Data {
+        
+        SecKeyEncrypt(<#T##key: SecKey##SecKey#>, <#T##padding: SecPadding##SecPadding#>, <#T##plainText: UnsafePointer<UInt8>##UnsafePointer<UInt8>#>, <#T##plainTextLen: Int##Int#>, <#T##cipherText: UnsafeMutablePointer<UInt8>##UnsafeMutablePointer<UInt8>#>, <#T##cipherTextLen: UnsafeMutablePointer<Int>##UnsafeMutablePointer<Int>#>)
+        SecKeyCreateEncryptedData(<#T##key: SecKey##SecKey#>, <#T##algorithm: SecKeyAlgorithm##SecKeyAlgorithm#>, <#T##plaintext: CFData##CFData#>, <#T##error: UnsafeMutablePointer<Unmanaged<CFError>?>?##UnsafeMutablePointer<Unmanaged<CFError>?>?#>)
+    }
+//
+//    func privateKeyDecrypt(str:String) -> Data {
+//        SecKeyDecrypt(<#T##key: SecKey##SecKey#>, <#T##padding: SecPadding##SecPadding#>, <#T##cipherText: UnsafePointer<UInt8>##UnsafePointer<UInt8>#>, <#T##cipherTextLen: Int##Int#>, <#T##plainText: UnsafeMutablePointer<UInt8>##UnsafeMutablePointer<UInt8>#>, <#T##plainTextLen: UnsafeMutablePointer<Int>##UnsafeMutablePointer<Int>#>)
+//        SecKeyCreateDecryptedData(<#T##key: SecKey##SecKey#>, <#T##algorithm: SecKeyAlgorithm##SecKeyAlgorithm#>, <#T##ciphertext: CFData##CFData#>, <#T##error: UnsafeMutablePointer<Unmanaged<CFError>?>?##UnsafeMutablePointer<Unmanaged<CFError>?>?#>)
+//    }
     
     
     
