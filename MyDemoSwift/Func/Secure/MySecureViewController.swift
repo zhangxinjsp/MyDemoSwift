@@ -32,6 +32,10 @@ class MySecureViewController: MyBaseViewController {
         // Do any additional setup after loading the view.
         //MARK 需要桥接文件导入  #import <CommonCrypto/CommonDigest.h>
         initControls()
+        
+        generatePairKey()
+        
+        savegeneratePairKey()
     }
 
     override func didReceiveMemoryWarning() {
@@ -436,11 +440,46 @@ class MySecureViewController: MyBaseViewController {
     }
     
     
+    /***************************** 密钥对创建 ***********************************/
     
     
+    func generatePairKey() {
+        
+        let iKeySize = 1024
+        
+        let parameters:CFDictionary = CFDictionaryCreateMutable(kCFAllocatorDefault, 1, nil, nil)
+        
+        let key1 = Unmanaged.passRetained(kSecAttrKeyType as NSString).autorelease().toOpaque()
+        let value1 = Unmanaged.passRetained(kSecAttrKeyTypeRSA as NSString).autorelease().toOpaque()
+        CFDictionarySetValue(parameters as! CFMutableDictionary, key1, value1)
+        
+        let key2 = Unmanaged.passRetained(kSecAttrKeySizeInBits as NSString).autorelease().toOpaque()
+        let value2 = Unmanaged.passRetained(NSNumber.init(value: iKeySize)).autorelease().toOpaque()
+        CFDictionarySetValue(parameters as! CFMutableDictionary, key2, value2)
+        
+        var publicKey:SecKey? = nil
+        var privateKey:SecKey? = nil
+        let ret = SecKeyGeneratePair(parameters, &publicKey, &privateKey);
+        
+        if ret == errSecSuccess {
+            print("Key success!")
+        } else {
+            print("Key Failure! \(ret)")
+        }
+    }
     
-    
-    
+    func savegeneratePairKey() {
+        
+//        SecItemAdd(<#T##attributes: CFDictionary##CFDictionary#>, <#T##result: UnsafeMutablePointer<CFTypeRef?>?##UnsafeMutablePointer<CFTypeRef?>?#>)
+        
+        var keys:[UnsafeRawPointer?] = [<#value#>]
+        var values:[UnsafeRawPointer?] = [<#value#>]
+        
+        
+        let dict = CFDictionaryCreate(kCFAllocatorDefault, &keys, &values, 1, nil, nil)
+        
+//        CFDictionaryCreate(<#T##allocator: CFAllocator!##CFAllocator!#>, <#T##keys: UnsafeMutablePointer<UnsafeRawPointer?>!##UnsafeMutablePointer<UnsafeRawPointer?>!#>, <#T##values: UnsafeMutablePointer<UnsafeRawPointer?>!##UnsafeMutablePointer<UnsafeRawPointer?>!#>, <#T##numValues: CFIndex##CFIndex#>, <#T##keyCallBacks: UnsafePointer<CFDictionaryKeyCallBacks>!##UnsafePointer<CFDictionaryKeyCallBacks>!#>, <#T##valueCallBacks: UnsafePointer<CFDictionaryValueCallBacks>!##UnsafePointer<CFDictionaryValueCallBacks>!#>)
+    }
     
     
     

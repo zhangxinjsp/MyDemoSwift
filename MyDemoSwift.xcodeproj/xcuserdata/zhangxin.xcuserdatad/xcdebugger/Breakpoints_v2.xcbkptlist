@@ -28,12 +28,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MyDemoSwift/Func/NetworkSession/MySessionViewController.swift"
-            timestampString = "555495954.061253"
+            timestampString = "555497838.995205"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "102"
             endingLineNumber = "102"
             landmarkName = "requestDataFromTsp(sender:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MyDemoSwift/Func/Secure/MySecureViewController.swift"
+            timestampString = "555499647.941093"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "481"
+            endingLineNumber = "481"
+            landmarkName = "savegeneratePairKey()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
