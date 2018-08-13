@@ -472,12 +472,13 @@ class MySecureViewController: MyBaseViewController {
         
 //        SecItemAdd(<#T##attributes: CFDictionary##CFDictionary#>, <#T##result: UnsafeMutablePointer<CFTypeRef?>?##UnsafeMutablePointer<CFTypeRef?>?#>)
         
-        var keys:[UnsafeRawPointer?] = [<#value#>]
-        var values:[UnsafeRawPointer?] = [<#value#>]
+        var keys:[UnsafeRawPointer?] = [UnsafeRawPointer("key1"), UnsafeRawPointer("key2")]
+        var values:[UnsafeRawPointer?] = [UnsafeRawPointer("value1"), UnsafeRawPointer("value2")]
         
         
-        let dict = CFDictionaryCreate(kCFAllocatorDefault, &keys, &values, 1, nil, nil)
+        let dict = CFDictionaryCreate(kCFAllocatorDefault, &keys, &values, keys.count, nil, nil)
         
+        print("\(String(describing: CFDictionaryGetCount(dict)))")
 //        CFDictionaryCreate(<#T##allocator: CFAllocator!##CFAllocator!#>, <#T##keys: UnsafeMutablePointer<UnsafeRawPointer?>!##UnsafeMutablePointer<UnsafeRawPointer?>!#>, <#T##values: UnsafeMutablePointer<UnsafeRawPointer?>!##UnsafeMutablePointer<UnsafeRawPointer?>!#>, <#T##numValues: CFIndex##CFIndex#>, <#T##keyCallBacks: UnsafePointer<CFDictionaryKeyCallBacks>!##UnsafePointer<CFDictionaryKeyCallBacks>!#>, <#T##valueCallBacks: UnsafePointer<CFDictionaryValueCallBacks>!##UnsafePointer<CFDictionaryValueCallBacks>!#>)
     }
     

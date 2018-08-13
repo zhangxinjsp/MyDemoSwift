@@ -43,13 +43,29 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "MyDemoSwift/Func/Secure/MySecureViewController.swift"
-            timestampString = "555499647.941093"
+            filePath = "MyDemoSwift/Func/PointTransfer/PointerViewController.swift"
+            timestampString = "555580845.431792"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "481"
-            endingLineNumber = "481"
-            landmarkName = "savegeneratePairKey()"
+            startingLineNumber = "267"
+            endingLineNumber = "267"
+            landmarkName = "cfDictionaryCreate()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MyDemoSwift/Func/PointTransfer/PointerViewController.swift"
+            timestampString = "555580845.432199"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "265"
+            endingLineNumber = "265"
+            landmarkName = "cfDictionaryCreate()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
