@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		5B0061352119DB7E00AB1ECF /* MySocketServiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B0061342119DB7E00AB1ECF /* MySocketServiceViewController.swift */; };
 		5B0061372119DB9F00AB1ECF /* MySocketClientViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B0061362119DB9F00AB1ECF /* MySocketClientViewController.swift */; };
-		5B00613C211BC91700AB1ECF /* rsa2048rootca.der in Resources */ = {isa = PBXBuildFile; fileRef = 5B00613A211BC91700AB1ECF /* rsa2048rootca.der */; };
-		5B00613D211BC91700AB1ECF /* PKIRootCA.der in Resources */ = {isa = PBXBuildFile; fileRef = 5B00613B211BC91700AB1ECF /* PKIRootCA.der */; };
 		5B339D3F1E851CD700B1DF75 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B339D3E1E851CD700B1DF75 /* AppDelegate.swift */; };
 		5B339D461E851CD700B1DF75 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5B339D451E851CD700B1DF75 /* Assets.xcassets */; };
 		5B339D531E851FB400B1DF75 /* MyBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B339D521E851FB400B1DF75 /* MyBaseViewController.swift */; };
@@ -141,8 +139,6 @@
 /* Begin PBXFileReference section */
 		5B0061342119DB7E00AB1ECF /* MySocketServiceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MySocketServiceViewController.swift; sourceTree = "<group>"; };
 		5B0061362119DB9F00AB1ECF /* MySocketClientViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MySocketClientViewController.swift; sourceTree = "<group>"; };
-		5B00613A211BC91700AB1ECF /* rsa2048rootca.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = rsa2048rootca.der; sourceTree = "<group>"; };
-		5B00613B211BC91700AB1ECF /* PKIRootCA.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = PKIRootCA.der; sourceTree = "<group>"; };
 		5B339D3B1E851CD700B1DF75 /* MyDemoSwift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyDemoSwift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B339D3E1E851CD700B1DF75 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5B339D451E851CD700B1DF75 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -358,8 +354,6 @@
 		5B9E278D1E88F32400C855A3 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
-				5B00613B211BC91700AB1ECF /* PKIRootCA.der */,
-				5B00613A211BC91700AB1ECF /* rsa2048rootca.der */,
 				5B4E951D21115BBB00E072D2 /* private_key.p12 */,
 				5B4E951C21115BBB00E072D2 /* public_key.der */,
 				5BF5FD9020FC2DF3005D1ACA /* aboutUs@2x.png */,
@@ -646,7 +640,6 @@
 				5BF5FDDF20FC2DF4005D1ACA /* unpraise_gray@2x.png in Resources */,
 				5BF5FDFA20FC2DF5005D1ACA /* IMG_0426@2x.jpg in Resources */,
 				5BF5FDDE20FC2DF4005D1ACA /* defaultAvatar@2x.png in Resources */,
-				5B00613C211BC91700AB1ECF /* rsa2048rootca.der in Resources */,
 				5BF5FDC320FC2DF4005D1ACA /* accountBind@2x.png in Resources */,
 				5BF5FDFE20FC2DF5005D1ACA /* IMG_0427@2x.jpg in Resources */,
 				5BF5FE1820FC2DF5005D1ACA /* logo@2x.png in Resources */,
@@ -681,7 +674,6 @@
 				5BF5FDF120FC2DF4005D1ACA /* recommendFriend@2x.png in Resources */,
 				5BF5FDE620FC2DF4005D1ACA /* orderEmptyErrorIcon@2x.png in Resources */,
 				5BF5FDC820FC2DF4005D1ACA /* praise_gray@2x.png in Resources */,
-				5B00613D211BC91700AB1ECF /* PKIRootCA.der in Resources */,
 				5BF5FDD520FC2DF4005D1ACA /* commentDialogue@2x.png in Resources */,
 				5BF5FDBF20FC2DF4005D1ACA /* favoriteCircleUnselected@2x.png in Resources */,
 				5BF5FDD420FC2DF4005D1ACA /* loginBG@2x.png in Resources */,

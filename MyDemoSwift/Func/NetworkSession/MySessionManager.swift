@@ -10,11 +10,7 @@ import UIKit
 import Foundation
 
 
-//let url:String = "https://pkicatest.mychery.com:448/cherym31t/command";
-let url:String = "https://sh.syan.com.cn:7756/cherym31t/command";//信任站点
-//let url:String = "https://sh.syan.com.cn:7758/cherym31t/command";//不信任站点
-//let url:String = "https://203.93.252.29:18088/cherym31t/command"
-//let url:String = "https://203.93.252.40:8088/cherym31t/command";
+let url:String = "url";//信任站点
 
 class MySessionManager: NSObject, URLSessionDelegate, URLSessionTaskDelegate, URLSessionDataDelegate, URLSessionDownloadDelegate {
     
