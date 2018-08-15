@@ -10,7 +10,7 @@ import UIKit
 import Foundation
 
 
-let url:String = "url";//信任站点
+private let url:String = "url";//信任站点
 
 class MySessionManager: NSObject, URLSessionDelegate, URLSessionTaskDelegate, URLSessionDataDelegate, URLSessionDownloadDelegate {
     
