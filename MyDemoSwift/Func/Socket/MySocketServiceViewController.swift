@@ -15,18 +15,43 @@ import UIKit
 class MySocketServiceViewController: MyBaseViewController {
 
     var socket:CFSocket? = nil
+    var socketThread:Thread? = nil
     
+    var label:UILabel = UILabel.init()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
+        
+        createSubcontrol()
+        
+        socketThread = Thread.init(target: self, selector: #selector(initSocketService), object: nil)
+        socketThread?.name = "socketService"
+        socketThread?.start()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    func createSubcontrol() {
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.backgroundColor = UIColor.red
+        label.text = "aaaaa"
+        label.textAlignment = NSTextAlignment.center
+        label.numberOfLines = 0
+        self.view.addSubview(label)
+        
+        let viewsDict:Dictionary = ["label" : label]
+        
+        
+        self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[label(>=0)]-0-|", options: NSLayoutFormatOptions.alignAllTop, metrics: nil, views: viewsDict))
+        self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-64-[label(100)]-(>=0)-|", options: NSLayoutFormatOptions.alignAllTop, metrics: nil, views: viewsDict))
+    }
+    
     
 
     // 开辟一个线程线程函数中
@@ -37,7 +62,7 @@ class MySocketServiceViewController: MyBaseViewController {
         CFRunLoopRun();    // 运行当前线程的CFRunLoop对象
     }
     
-    func initSocketService() -> Bool{
+    @objc func initSocketService() -> Bool{
     
         socket = CFSocketCreate(kCFAllocatorDefault,
                                 PF_INET,
@@ -91,39 +116,43 @@ class MySocketServiceViewController: MyBaseViewController {
     // socket回调函数，同客户端
     let socketCallback : @convention(c) (CFSocket?, CFSocketCallBackType, CFData?, UnsafeRawPointer?, UnsafeMutableRawPointer?) -> Swift.Void = {(socket:CFSocket?, callbackType:CFSocketCallBackType, address:CFData?, data:UnsafeRawPointer?, info:UnsafeMutableRawPointer?) in
         
-//    if (kCFSocketAcceptCallBack == type) {
-//    // 本地套接字句柄
-//    CFSocketNativeHandle nativeSocketHandle = *(CFSocketNativeHandle *)data;
-//    uint8_t name[SOCK_MAXADDRLEN];
-//    socklen_t nameLen = sizeof(name);
-//    if (0 != getpeername(nativeSocketHandle, (struct sockaddr *)name,&nameLen)) {
-//    NSLog(@"error");
-//    exit(1);
-//    }
-//    NSLog(@"%s connected.", inet_ntoa( ((struct sockaddr_in*)name)->sin_addr ));
-//    CFReadStreamRef iStream;
-//    CFWriteStreamRef oStream;
-//    // 创建一个可读写的socket连接
-//    CFStreamCreatePairWithSocket(kCFAllocatorDefault,nativeSocketHandle, &iStream, &oStream);
-//    if (iStream && oStream) {
-//    CFStreamClientContext streamContext = {0, NULL, NULL, NULL};
-//    if (!CFReadStreamSetClient(iStream, kCFStreamEventHasBytesAvailable,
-//    readStream, // 回调函数，当有可读的数据时调用
-//    &streamContext)){
-//    exit(1);
-//    }
-//
-//    if (!CFWriteStreamSetClient(oStream, kCFStreamEventCanAcceptBytes, writeStream, &streamContext)){
-//    exit(1);
-//    }
-//    CFReadStreamScheduleWithRunLoop(iStream, CFRunLoopGetCurrent(),kCFRunLoopCommonModes);
-//    CFWriteStreamScheduleWithRunLoop(oStream, CFRunLoopGetCurrent(),kCFRunLoopCommonModes);
-//    CFReadStreamOpen(iStream);
-//    CFWriteStreamOpen(oStream);
-//    } else {
-//    close(nativeSocketHandle);
-//    }
-//    }
+        info!.load(as: MySocketServiceViewController.self).label.text = "conect Success"
+        
+        if (CFSocketCallBackType.acceptCallBack == callbackType) {
+            // 本地套接字句柄
+            let nativeSocketHandle:CFSocketNativeHandle = (data?.load(as: CFSocketNativeHandle.self))!
+            var name:sockaddr = sockaddr()
+            var nameLen:socklen_t = socklen_t(MemoryLayout.size(ofValue: name))
+            
+            if (0 != getpeername(nativeSocketHandle, &name, &nameLen)) {
+                print("error");
+                exit(1);
+            }
+            print("connected to \(name)")
+            
+            //    CFReadStreamRef iStream;
+            //    CFWriteStreamRef oStream;
+            //    // 创建一个可读写的socket连接
+            //    CFStreamCreatePairWithSocket(kCFAllocatorDefault,nativeSocketHandle, &iStream, &oStream);
+            //    if (iStream && oStream) {
+            //    CFStreamClientContext streamContext = {0, NULL, NULL, NULL};
+            //    if (!CFReadStreamSetClient(iStream, kCFStreamEventHasBytesAvailable,
+            //    readStream, // 回调函数，当有可读的数据时调用
+            //    &streamContext)){
+            //    exit(1);
+            //    }
+            //
+            //    if (!CFWriteStreamSetClient(oStream, kCFStreamEventCanAcceptBytes, writeStream, &streamContext)){
+            //    exit(1);
+            //    }
+            //    CFReadStreamScheduleWithRunLoop(iStream, CFRunLoopGetCurrent(),kCFRunLoopCommonModes);
+            //    CFWriteStreamScheduleWithRunLoop(oStream, CFRunLoopGetCurrent(),kCFRunLoopCommonModes);
+            //    CFReadStreamOpen(iStream);
+            //    CFWriteStreamOpen(oStream);
+            //    } else {
+            //    close(nativeSocketHandle);
+            //    }
+        }
     }
 
 }

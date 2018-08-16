@@ -17,6 +17,9 @@ enum SecureType: String {
     case _3DES
     case RC4
     case RSA
+    case PairKey
+    case SaveKey
+    case Sign
     case def
 }
 
@@ -32,10 +35,6 @@ class MySecureViewController: MyBaseViewController {
         // Do any additional setup after loading the view.
         //MARK 需要桥接文件导入  #import <CommonCrypto/CommonDigest.h>
         initControls()
-        
-        generatePairKey()
-        
-        savegeneratePairKey()
     }
 
     override func didReceiveMemoryWarning() {
@@ -66,7 +65,10 @@ class MySecureViewController: MyBaseViewController {
                                     "encryptLabel" : encryptLabel,
                                     "decryptLabel" : decryptLabel,]
         
-        let titles:[SecureType] = [.MD5, .SHA1, .SHA224, .SHA512, .AES, ._3DES, .RC4, .RSA, .def]
+        let titles:[SecureType] = [.MD5, .SHA1, .SHA224,
+                                   .SHA512, .AES, ._3DES,
+                                   .RC4, .RSA, .PairKey,
+                                   .SaveKey, .Sign, .def]
         
         let itemInRow = 3
         let rowCount = (titles.count + itemInRow - 1) / 3
@@ -121,16 +123,16 @@ class MySecureViewController: MyBaseViewController {
         
         switch tag {
         case .MD5:
-            encryptStr = md5Secure(encryptStr: textField.text!)
+            encryptStr = md5Secure(plainText: textField.text!)
             decryptStr = "can not decrypt"
         case .SHA1:
-            encryptStr = sha1Secure(encryptStr: textField.text!)
+            encryptStr = sha1Secure(plainText: textField.text!)
             decryptStr = "can not decrypt"
         case.SHA224:
-            encryptStr = sha224Secure(encryptStr: textField.text!)
+            encryptStr = sha224Secure(plainText: textField.text!)
             decryptStr = "can not decrypt"
         case.SHA512:
-            encryptStr = sha512Secure(encryptStr: textField.text!)
+            encryptStr = sha512Secure(plainText: textField.text!)
             decryptStr = "can not decrypt"
         case.AES:
             encryptStr = secure(operation: CCOperation(kCCEncrypt), text: textField.text!, key: "key", alg: CCAlgorithm(kCCAlgorithmAES), keySize: kCCKeySizeAES256, blockSize: kCCBlockSizeAES128)!
@@ -145,7 +147,17 @@ class MySecureViewController: MyBaseViewController {
             
             encryptStr = publicKeyEncrypt(plainText: textField.text!)!
             decryptStr = privateKeyDecrypt(cipherText: encryptStr)!
+        case.PairKey:
+            let checkResult = generatePairKey()
+            encryptStr = checkResult.en
+            decryptStr = checkResult.de
             
+        case.SaveKey:
+            savegeneratePairKey()
+            
+        case.Sign:
+            let aa = sha256Sign(plainText: textField.text!)
+            let _ = sha256Verify(plainText: textField.text!, signature: aa)
             
         default:
             encryptStr = "default"
@@ -158,8 +170,8 @@ class MySecureViewController: MyBaseViewController {
     }
 
     //MARK MD5 and SHA
-    func md5Secure(encryptStr: String) -> String {
-        let cStr:[CChar] = encryptStr.cString(using: String.Encoding.utf8)!;
+    func md5Secure(plainText: String) -> String {
+        let cStr:[CChar] = plainText.cString(using: String.Encoding.utf8)!;
         
         let strLength = CC_LONG(strlen(cStr))
         let result = UnsafeMutablePointer<CUnsignedChar>.allocate(capacity: Int(CC_MD5_DIGEST_LENGTH))
@@ -173,8 +185,8 @@ class MySecureViewController: MyBaseViewController {
         return secureStr
     }
 
-    func sha1Secure(encryptStr: String) -> String {
-        let cStr:[CChar] = encryptStr.cString(using: String.Encoding.utf8)!;
+    func sha1Secure(plainText: String) -> String {
+        let cStr:[CChar] = plainText.cString(using: String.Encoding.utf8)!;
         
         let strLength = CC_LONG(strlen(cStr))
         let result = UnsafeMutablePointer<CUnsignedChar>.allocate(capacity: Int(CC_SHA1_DIGEST_LENGTH))
@@ -188,8 +200,8 @@ class MySecureViewController: MyBaseViewController {
         return secureStr
     }
     
-    func sha224Secure(encryptStr: String) -> String {
-        let cStr:[CChar] = encryptStr.cString(using: String.Encoding.utf8)!;
+    func sha224Secure(plainText: String) -> String {
+        let cStr:[CChar] = plainText.cString(using: String.Encoding.utf8)!;
         
         let strLength = CC_LONG(strlen(cStr))
         let result = UnsafeMutablePointer<CUnsignedChar>.allocate(capacity: Int(CC_SHA224_DIGEST_LENGTH))
@@ -203,8 +215,8 @@ class MySecureViewController: MyBaseViewController {
         return secureStr
     }
     
-    func sha512Secure(encryptStr: String) -> String {
-        let cStr:[CChar] = encryptStr.cString(using: String.Encoding.utf8)!;
+    func sha512Secure(plainText: String) -> String {
+        let cStr:[CChar] = plainText.cString(using: String.Encoding.utf8)!;
         
         let strLength = CC_LONG(strlen(cStr))
         let result = UnsafeMutablePointer<CUnsignedChar>.allocate(capacity: Int(CC_SHA512_DIGEST_LENGTH))
@@ -443,12 +455,12 @@ class MySecureViewController: MyBaseViewController {
     /***************************** 密钥对创建 ***********************************/
     
     
-    func generatePairKey() {
+    func generatePairKey() -> (en:String, de:String) {
         
         let iKeySize = 1024
         
-        let parameters:CFDictionary = CFDictionaryCreateMutable(kCFAllocatorDefault, 1, nil, nil)
-        
+        let parameters:CFDictionary = CFDictionaryCreateMutable(kCFAllocatorDefault, 2, nil, nil)
+
         let key1 = Unmanaged.passRetained(kSecAttrKeyType as NSString).autorelease().toOpaque()
         let value1 = Unmanaged.passRetained(kSecAttrKeyTypeRSA as NSString).autorelease().toOpaque()
         CFDictionarySetValue(parameters as! CFMutableDictionary, key1, value1)
@@ -463,9 +475,59 @@ class MySecureViewController: MyBaseViewController {
         
         if ret == errSecSuccess {
             print("Key success!")
+            
+            return checkGeneratePairKey(publicKey: publicKey, privateKey: privateKey)
         } else {
             print("Key Failure! \(ret)")
         }
+        return ("", "")
+    }
+    
+    func checkGeneratePairKey(publicKey:SecKey?, privateKey:SecKey?) -> (en:String, de:String) {
+        
+        let plainText:String = textField.text!
+        
+        let plainTextData = [UInt8](plainText.utf8)
+        let plainTextDataLength = plainText.count
+        
+        let plainTextCFData = CFDataCreate(kCFAllocatorDefault, plainTextData, plainTextDataLength)
+        var error : Unmanaged<CFError>? = nil
+        var cipherText:String? = nil
+        
+        if #available(iOS 10.0, *) {
+            let resultcf = SecKeyCreateEncryptedData(publicKey!, SecKeyAlgorithm.rsaEncryptionPKCS1, plainTextCFData!, &error)
+            let length:Int = CFDataGetLength(resultcf)
+            var cipher = [UInt8](repeating: 0, count: length)
+            CFDataGetBytes(resultcf, CFRangeMake(0, length), &cipher)
+            let encryptData:Data? = Data.init(bytes: cipher, count: length)
+            cipherText = encryptData!.base64EncodedString()
+        } else {
+            // Fallback on earlier versions
+        }
+        
+        let cipherData = [UInt8](Data.init(base64Encoded: cipherText!)!)
+        let cipherDataLength = cipherData.count
+        
+        var resultData:Data? = nil
+        
+        if #available(iOS 10.0, *) {
+            
+            let cipherTextCFData = CFDataCreate(kCFAllocatorDefault, cipherData, cipherDataLength)
+            var error : Unmanaged<CFError>? = nil
+            let resultcf = SecKeyCreateDecryptedData(privateKey!, SecKeyAlgorithm.rsaEncryptionPKCS1, cipherTextCFData!, &error)
+            
+            let length:Int = CFDataGetLength(resultcf)
+            var plain = [UInt8](repeating: 0, count: length)
+            CFDataGetBytes(resultcf, CFRangeMake(0, length), &plain)
+            resultData = Data.init(bytes: plain, count: length)
+            
+        } else {
+            
+        }
+        
+        let str = String.init(data: resultData!, encoding: String.Encoding.utf8)
+        
+        return (cipherText!, str!)
     }
     
     func savegeneratePairKey() {
@@ -484,10 +546,74 @@ class MySecureViewController: MyBaseViewController {
     
     
     
+    /************************* rsa 签名 与 验签  *********************************/
     
+    func sha256Sign(plainText:String) -> Data {
+        
+        let key:SecKey = self.privateKey()!
+        
+        let dataToSignLen = Int(CC_SHA256_DIGEST_LENGTH)
+        let dataToSign = UnsafeMutablePointer<CUnsignedChar>.allocate(capacity: dataToSignLen)
+        
+        let plainData:[CChar] = plainText.cString(using: String.Encoding.utf8)!;
+        let plainDataLen = CC_LONG(strlen(plainData))
+        CC_SHA256(plainData, plainDataLen, dataToSign)
+        
+        print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) data to sign <\(dataToSign)>")
+        
+        var sigLen:size_t = SecKeyGetBlockSize(key);
+        let sig = UnsafeMutablePointer<CUnsignedChar>.allocate(capacity: Int(sigLen))
+        
+        let status:OSStatus = SecKeyRawSign(key,
+                                            SecPadding.PKCS1SHA256,
+                                            dataToSign,
+                                            dataToSignLen,
+                                            sig,
+                                            &sigLen);
+        
+        let signedData:Data = Data.init(bytes: sig, count: sigLen) //[NSData dataWithBytes:signedHashBytes  length:(NSUInteger)signedHashBytesSize];
+        
+        free(sig)
+        print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) sign status: <\(status)>")
+        print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) signed data: <\(signedData)>")
+        
+        return signedData;
+    }
     
-    
-    
+    //这边对签名的数据进行验证 验签成功，则返回YES
+    func sha256Verify(plainText:String, signature:Data) -> Bool{
+        let key:SecKey = self.publicKey()!
+        
+        //原始数据
+        let signedDataLen:Int = Int(CC_SHA256_DIGEST_LENGTH)
+        let signedData = UnsafeMutablePointer<CUnsignedChar>.allocate(capacity: Int(signedDataLen))
+        
+        let plainData:[CChar] = plainText.cString(using: String.Encoding.utf8)!
+        let plainDataLen = CC_LONG(strlen(plainData))
+        CC_SHA256(plainData, plainDataLen, signedData)
+        
+        //签名数据
+        let sigLen:Int = signature.count
+        var sig:[UInt8] = [UInt8](repeating: 0, count: sigLen)
+        signature.copyBytes(to: &sig, count: sigLen)
+        
+        let status:OSStatus = SecKeyRawVerify(key,
+                                              SecPadding.PKCS1SHA256,
+                                              signedData,
+                                              signedDataLen,
+                                              sig,
+                                              sigLen)
+
+        let data:Data = Data.init(bytes: sig, count: sigLen)
+
+        print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) verify status: <\(status)>")
+        print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) <\(data)>")
+        
+        return status == errSecSuccess;
+        
+        
+    }
+
     
     
     

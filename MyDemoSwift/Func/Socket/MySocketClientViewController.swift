@@ -16,8 +16,8 @@ import UIKit
 
 class MySocketClientViewController: MyBaseViewController, StreamDelegate {
     
-    let socketUrl = "10:12:12:12"//ABCD:EF01:2345:6789:ABCD:EF01:2345:6789
-    let socketPort:UInt16 = 8001
+    let socketUrl = "192:168:2:8"//ABCD:EF01:2345:6789:ABCD:EF01:2345:6789
+    let socketPort:UInt16 = 8888
     var inputStream:InputStream?
     var outputStream:OutputStream?
     
@@ -32,7 +32,7 @@ class MySocketClientViewController: MyBaseViewController, StreamDelegate {
 
         // Do any additional setup after loading the view.
         
-        streamSocket()
+//        streamSocket()
         
         createSocket()
     }
@@ -41,6 +41,23 @@ class MySocketClientViewController: MyBaseViewController, StreamDelegate {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    func createSubcontrol() {
+        let label:UILabel = UILabel.init()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.backgroundColor = UIColor.red
+        label.text = "aaaaa"
+        label.textAlignment = NSTextAlignment.center
+        label.numberOfLines = 0
+        self.view.addSubview(label)
+        
+        let viewsDict:Dictionary = ["label" : label]
+        
+        
+        self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[label(>=0)]-0-|", options: NSLayoutFormatOptions.alignAllTop, metrics: nil, views: viewsDict))
+        self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-64-[label(100)]-(>=0)-|", options: NSLayoutFormatOptions.alignAllTop, metrics: nil, views: viewsDict))
+    }
+
     
 
     // MARK: - stream socket
@@ -288,21 +305,21 @@ class MySocketClientViewController: MyBaseViewController, StreamDelegate {
     @objc func sendMessage() {
     
         while (!(sendThread?.isCancelled)!) {
-            if (socket != nil) {
-                let data = [UInt8]("aaa".data(using: String.Encoding.utf8)!)
-                print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) \(data)");
-                
-                let sendData:CFData = CFDataCreate(kCFAllocatorDefault, data, data.count);
-                let error:CFSocketError = CFSocketSendData(socket, addressData, sendData, 10);
-                if (error == .success) {
-                    print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) success");
-                } else {
-                    print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) failed");
-                    DispatchQueue.main.async {
-                        
-                    }
-                }
-            }
+//            if (socket != nil) {
+//                let data = [UInt8]("aaa".data(using: String.Encoding.utf8)!)
+//                print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) \(data)");
+//
+//                let sendData:CFData = CFDataCreate(kCFAllocatorDefault, data, data.count);
+//                let error:CFSocketError = CFSocketSendData(socket, addressData, sendData, 10);
+//                if (error == .success) {
+//                    print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) success");
+//                } else {
+//                    print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) failed");
+//                    DispatchQueue.main.async {
+//
+//                    }
+//                }
+//            }
         }
     }
     
