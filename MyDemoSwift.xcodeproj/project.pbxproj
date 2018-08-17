@@ -894,7 +894,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.chery.cloudrive3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "5670d66e-21a3-4834-827b-81125854747e";
+				PROVISIONING_PROFILE = "b1acb1fb-af74-4ee8-85c3-95366e379a3e";
 				PROVISIONING_PROFILE_SPECIFIER = Cloudrive3_BOSCH;
 				SWIFT_OBJC_BRIDGING_HEADER = "MyDemoSwift/MyDemoSwift-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
