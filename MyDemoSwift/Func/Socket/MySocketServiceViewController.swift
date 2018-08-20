@@ -14,10 +14,12 @@ import UIKit
 
 class MySocketServiceViewController: MyBaseViewController {
 
+    let socketPort:UInt16 = 8888
+    
     var socket:CFSocket? = nil
     var socketThread:Thread? = nil
     
-    var label:UILabel = UILabel.init()
+    var textView:UITextView = UITextView.init()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,7 +29,7 @@ class MySocketServiceViewController: MyBaseViewController {
         
         createSubcontrol()
         
-        socketThread = Thread.init(target: self, selector: #selector(initSocketService), object: nil)
+        socketThread = Thread.init(target: self, selector: #selector(runLoopInThread), object: nil)
         socketThread?.name = "socketService"
         socketThread?.start()
     }
@@ -38,31 +40,41 @@ class MySocketServiceViewController: MyBaseViewController {
     }
     
     func createSubcontrol() {
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.backgroundColor = UIColor.red
-        label.text = "aaaaa"
-        label.textAlignment = NSTextAlignment.center
-        label.numberOfLines = 0
-        self.view.addSubview(label)
+        textView.translatesAutoresizingMaskIntoConstraints = false
+        textView.backgroundColor = UIColor.red
+        textView.text = "start"
+        textView.isEditable = false
+        self.view.addSubview(textView)
         
-        let viewsDict:Dictionary = ["label" : label]
+        let viewsDict:Dictionary = ["textView" : textView]
         
         
-        self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[label(>=0)]-0-|", options: NSLayoutFormatOptions.alignAllTop, metrics: nil, views: viewsDict))
-        self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-64-[label(100)]-(>=0)-|", options: NSLayoutFormatOptions.alignAllTop, metrics: nil, views: viewsDict))
+        self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[textView(>=0)]-0-|", options: NSLayoutFormatOptions.alignAllTop, metrics: nil, views: viewsDict))
+        self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-64-[textView(300)]-(>=0)-|", options: NSLayoutFormatOptions.alignAllTop, metrics: nil, views: viewsDict))
     }
     
-    
+    public func updateText(text:String)  {
+        DispatchQueue.main.async {
+            self.textView.text = self.textView.text + "\n" + text
+        }
+        
+    }
 
     // 开辟一个线程线程函数中
-    func runLoopInThread() {
+    @objc func runLoopInThread() {
         if !self.initSocketService() {
             exit(1);
         }
+        updateText(text: "run in thread \(String(describing: Thread.current.name))")
+        let cfRunLoop:CFRunLoop = CFRunLoopGetCurrent();
+        let source:CFRunLoopSource = CFSocketCreateRunLoopSource(kCFAllocatorDefault,socket, 0);
+        CFRunLoopAddSource(cfRunLoop, source, CFRunLoopMode.commonModes);
+        
+        //        CFRelease(source);
         CFRunLoopRun();    // 运行当前线程的CFRunLoop对象
     }
     
-    @objc func initSocketService() -> Bool{
+    func initSocketService() -> Bool{
     
         socket = CFSocketCreate(kCFAllocatorDefault,
                                 PF_INET,
@@ -75,7 +87,7 @@ class MySocketServiceViewController: MyBaseViewController {
             print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) Cannot create socket!")
             return false
         }
-//
+        updateText(text: "socket create success")
         var optval:Int = 1;
         setsockopt(CFSocketGetNative(socket),
                    SOL_SOCKET,
@@ -86,8 +98,8 @@ class MySocketServiceViewController: MyBaseViewController {
         var ipv4 = sockaddr_in()
         ipv4.sin_len = __uint8_t(MemoryLayout.size(ofValue: ipv4))
         ipv4.sin_family = sa_family_t(AF_INET)
-        ipv4.sin_port = in_port_t(8888)
-        ipv4.sin_addr.s_addr = INADDR_ANY //inet_addr((address as NSString).utf8String)  // 把字符串的地址转换为机器可识别的网络地址
+        ipv4.sin_port = socketPort.bigEndian
+        ipv4.sin_addr.s_addr = INADDR_ANY.bigEndian //inet_addr((address as NSString).utf8String)  // 把字符串的地址转换为机器可识别的网络地址
         
         print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) \(ipv4)")
         
@@ -105,18 +117,34 @@ class MySocketServiceViewController: MyBaseViewController {
                 return false;
             }
         }
-
-        let cfRunLoop:CFRunLoop = CFRunLoopGetCurrent();
-        let source:CFRunLoopSource = CFSocketCreateRunLoopSource(kCFAllocatorDefault,socket, 0);
-        CFRunLoopAddSource(cfRunLoop, source, CFRunLoopMode.commonModes);
-//        CFRelease(source);
+        
+        updateText(text: "socket set address success")
         
         return true;
     }
     // socket回调函数，同客户端
-    let socketCallback : @convention(c) (CFSocket?, CFSocketCallBackType, CFData?, UnsafeRawPointer?, UnsafeMutableRawPointer?) -> Swift.Void = {(socket:CFSocket?, callbackType:CFSocketCallBackType, address:CFData?, data:UnsafeRawPointer?, info:UnsafeMutableRawPointer?) in
+    
+    
+    
+    let socketCallback:CFSocketCallBack = {(socket:CFSocket?, callbackType:CFSocketCallBackType, address:CFData?, data:UnsafeRawPointer?, info:UnsafeMutableRawPointer?) in
         
-        info!.load(as: MySocketServiceViewController.self).label.text = "conect Success"
+//        info!.load(as: MySocketServiceViewController.self).updateText(text: "connected success")
+        let readStream:CFReadStreamClientCallBack = {(stream:CFReadStream?, eventType:CFStreamEventType, info:UnsafeMutableRawPointer?) in
+            var buff:[UInt8] = []
+            CFReadStreamRead(stream, &buff, 255);
+            print("received: \(buff)");
+        }
+        
+        let writeStream:CFWriteStreamClientCallBack = {(stream:CFWriteStream?, eventType:CFStreamEventType, info:UnsafeMutableRawPointer?) in
+            
+            let data = [UInt8]("aaa".data(using: String.Encoding.utf8)!)
+            
+            if (stream != nil) {
+                CFWriteStreamWrite(stream, data, 6)
+            } else {
+                print("Cannot send data!")
+            }
+        }
         
         if (CFSocketCallBackType.acceptCallBack == callbackType) {
             // 本地套接字句柄
@@ -125,34 +153,54 @@ class MySocketServiceViewController: MyBaseViewController {
             var nameLen:socklen_t = socklen_t(MemoryLayout.size(ofValue: name))
             
             if (0 != getpeername(nativeSocketHandle, &name, &nameLen)) {
-                print("error");
+                print("error")
                 exit(1);
             }
             print("connected to \(name)")
             
-            //    CFReadStreamRef iStream;
-            //    CFWriteStreamRef oStream;
-            //    // 创建一个可读写的socket连接
-            //    CFStreamCreatePairWithSocket(kCFAllocatorDefault,nativeSocketHandle, &iStream, &oStream);
-            //    if (iStream && oStream) {
-            //    CFStreamClientContext streamContext = {0, NULL, NULL, NULL};
-            //    if (!CFReadStreamSetClient(iStream, kCFStreamEventHasBytesAvailable,
-            //    readStream, // 回调函数，当有可读的数据时调用
-            //    &streamContext)){
-            //    exit(1);
-            //    }
-            //
-            //    if (!CFWriteStreamSetClient(oStream, kCFStreamEventCanAcceptBytes, writeStream, &streamContext)){
-            //    exit(1);
-            //    }
-            //    CFReadStreamScheduleWithRunLoop(iStream, CFRunLoopGetCurrent(),kCFRunLoopCommonModes);
-            //    CFWriteStreamScheduleWithRunLoop(oStream, CFRunLoopGetCurrent(),kCFRunLoopCommonModes);
-            //    CFReadStreamOpen(iStream);
-            //    CFWriteStreamOpen(oStream);
-            //    } else {
-            //    close(nativeSocketHandle);
-            //    }
+            // 创建一个可读写的socket连接
+            var iStream:Unmanaged<CFReadStream>? = nil
+            var oStream:Unmanaged<CFWriteStream>? = nil
+            CFStreamCreatePairWithSocket(kCFAllocatorDefault,nativeSocketHandle, &iStream, &oStream)
+            
+            if (iStream != nil && oStream != nil) {
+                var streamContext:CFStreamClientContext = CFStreamClientContext()//{0, NULL, NULL, NULL}
+                streamContext.version = 0
+                streamContext.info = info
+                
+                let readStatus = CFReadStreamSetClient(iStream?.takeUnretainedValue(),
+                                                   CFStreamEventType.hasBytesAvailable.rawValue,
+                                                   readStream, // 回调函数，当有可读的数据时调用
+                                                   &streamContext)
+                
+                
+                if !readStatus {
+                    exit(1);
+                }
+            
+                let writeStatus = CFWriteStreamSetClient(oStream?.takeUnretainedValue(),
+                                                         CFStreamEventType.canAcceptBytes.rawValue,
+                                                         writeStream,
+                                                         &streamContext)
+                
+                
+                if (!writeStatus){
+                    exit(1);
+                }
+                CFReadStreamScheduleWithRunLoop(iStream?.takeUnretainedValue(), CFRunLoopGetCurrent(), CFRunLoopMode.commonModes);
+                CFWriteStreamScheduleWithRunLoop(oStream?.takeUnretainedValue(), CFRunLoopGetCurrent(), CFRunLoopMode.commonModes);
+                CFReadStreamOpen(iStream?.takeUnretainedValue());
+                CFWriteStreamOpen(oStream?.takeUnretainedValue());
+            } else {
+                close(nativeSocketHandle);
+            }
         }
     }
+        
+        
+        
+        
+        
+        
 
 }

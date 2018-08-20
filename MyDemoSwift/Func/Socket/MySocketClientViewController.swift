@@ -16,7 +16,7 @@ import UIKit
 
 class MySocketClientViewController: MyBaseViewController, StreamDelegate {
     
-    let socketUrl = "192:168:2:8"//ABCD:EF01:2345:6789:ABCD:EF01:2345:6789
+    let socketUrl = "192.168.2.2"//ABCD:EF01:2345:6789:ABCD:EF01:2345:6789
     let socketPort:UInt16 = 8888
     var inputStream:InputStream?
     var outputStream:OutputStream?
@@ -121,9 +121,9 @@ class MySocketClientViewController: MyBaseViewController, StreamDelegate {
     // MARK: - socket
     func socketAddressData(address:String, port:UInt16) -> CFData? {
         
-        if !address.contains(":") {
-            return nil
-        }
+//        if !address.contains(":") {
+//            return nil
+//        }
         
         let isIPV4 = true
         
@@ -135,7 +135,7 @@ class MySocketClientViewController: MyBaseViewController, StreamDelegate {
             var ipv4 = sockaddr_in()
             ipv4.sin_len = __uint8_t(MemoryLayout.size(ofValue: ipv4))
             ipv4.sin_family = sa_family_t(AF_INET)
-            ipv4.sin_port = in_port_t(port)
+            ipv4.sin_port = socketPort.bigEndian
             ipv4.sin_addr.s_addr = inet_addr((address as NSString).utf8String)  // 把字符串的地址转换为机器可识别的网络地址
 
             print("\(ipv4)")
@@ -149,11 +149,11 @@ class MySocketClientViewController: MyBaseViewController, StreamDelegate {
             return ipv4CFData
             
         } else {
-            
+//            <100222b8 c0a80202 00000000 00000000>
             var ipv6 = sockaddr_in6()   // IPV6
             ipv6.sin6_len = __uint8_t(MemoryLayout.size(ofValue: ipv6))
             ipv6.sin6_family = sa_family_t(AF_INET6)
-            ipv6.sin6_port = port
+            ipv6.sin6_port = port.bigEndian
             
             inet_pton(AF_INET6, (address as NSString).utf8String, &ipv6.sin6_addr)
             
@@ -177,11 +177,21 @@ class MySocketClientViewController: MyBaseViewController, StreamDelegate {
         
         var weakSelf = self
         
-        var sockContext = CFSocketContext.init(version: 0, info: &weakSelf, retain: nil, release: nil, copyDescription: nil)
+        var sockContext = CFSocketContext.init(version: 0,
+                                               info: &weakSelf,
+                                               retain: nil,
+                                               release: nil,
+                                               copyDescription: nil)
         
         let callbackTypes = UInt8(CFSocketCallBackType.connectCallBack.rawValue) | UInt8(CFSocketCallBackType.readCallBack.rawValue) | UInt8(CFSocketCallBackType.writeCallBack.rawValue) | UInt8(CFSocketCallBackType.dataCallBack.rawValue) | UInt8(CFSocketCallBackType.acceptCallBack.rawValue)
 
-        socket = CFSocketCreate(kCFAllocatorDefault, isIPv6 ? PF_INET6 : PF_INET, SOCK_STREAM, IPPROTO_TCP, CFOptionFlags(callbackTypes), socketCallback, &sockContext)
+        socket = CFSocketCreate(kCFAllocatorDefault,
+                                isIPv6 ? PF_INET6 : PF_INET,
+                                SOCK_STREAM,
+                                IPPROTO_TCP,
+                                CFOptionFlags(callbackTypes),
+                                socketCallback,
+                                &sockContext)
         
         var sockopt:CFOptionFlags = CFSocketGetSocketFlags(socket)
         sockopt |= kCFSocketCloseOnInvalidate | kCFSocketAutomaticallyReenableReadCallBack
@@ -233,7 +243,7 @@ class MySocketClientViewController: MyBaseViewController, StreamDelegate {
         
         print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) \(callbackType)")
         
-        print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) info: <\(String(describing: info?.load(as: String.self)))>")
+//        print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) info: <\(String(describing: info?.load(as: String.self)))>")
         switch (callbackType) {
         case .readCallBack:
             
@@ -257,7 +267,8 @@ class MySocketClientViewController: MyBaseViewController, StreamDelegate {
             
         case .dataCallBack:
             
-            let receiveData:Data =   (data?.load(as: Data.self))!
+//            let receiveData:Data =   (data?.load(as: Data.self))!
+            print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) \(String(describing: data))")
             DispatchQueue.main.async {
                 //info 指向的对象调用相应的方法
             }
@@ -277,7 +288,7 @@ class MySocketClientViewController: MyBaseViewController, StreamDelegate {
         
         print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) \(String(describing: Thread.current.name))")
         
-        let status:CFSocketError = CFSocketConnectToAddress(socket, addressData, 3)
+        let status:CFSocketError = CFSocketConnectToAddress(socket, addressData, -1)
         
         if (status == .success) {
             print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) connect to address success")
@@ -287,17 +298,17 @@ class MySocketClientViewController: MyBaseViewController, StreamDelegate {
             CFRunLoopRun();
             print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) run loop stoped");
             
-            CFRunLoopRemoveSource(cRunRef, sourceRef, CFRunLoopMode.commonModes);
+//            CFRunLoopRemoveSource(cRunRef, sourceRef, CFRunLoopMode.commonModes);
             //    cRunRef = nil;
             
-            if (CFRunLoopSourceIsValid(sourceRef)) {
-                CFRunLoopSourceInvalidate(sourceRef);
-            }
+//            if (CFRunLoopSourceIsValid(sourceRef)) {
+//                CFRunLoopSourceInvalidate(sourceRef);
+//            }
             //    CFRelease(sourceRef);
             //    sourceRef = nil;
             
         } else {
-            print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) connect to address failed");
+            print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) connect to address failed \(status)");
             self.stopScoket()
         }
     }
@@ -305,21 +316,21 @@ class MySocketClientViewController: MyBaseViewController, StreamDelegate {
     @objc func sendMessage() {
     
         while (!(sendThread?.isCancelled)!) {
-//            if (socket != nil) {
-//                let data = [UInt8]("aaa".data(using: String.Encoding.utf8)!)
-//                print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) \(data)");
-//
-//                let sendData:CFData = CFDataCreate(kCFAllocatorDefault, data, data.count);
-//                let error:CFSocketError = CFSocketSendData(socket, addressData, sendData, 10);
-//                if (error == .success) {
-//                    print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) success");
-//                } else {
-//                    print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) failed");
-//                    DispatchQueue.main.async {
-//
-//                    }
-//                }
-//            }
+            if (socket != nil) {
+                let data = [UInt8]("aaa".data(using: String.Encoding.utf8)!)
+                print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) \(data)");
+
+                let sendData:CFData = CFDataCreate(kCFAllocatorDefault, data, data.count);
+                let error:CFSocketError = CFSocketSendData(socket, addressData, sendData, 10);
+                if (error == .success) {
+                    print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) success");
+                } else {
+                    print("\(Date.init(timeIntervalSinceNow: 8*3600)) \(type(of: self)):\(#line) failed");
+                    DispatchQueue.main.async {
+
+                    }
+                }
+            }
         }
     }
     
